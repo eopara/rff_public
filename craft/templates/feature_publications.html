@@ -1,0 +1,41 @@
+{% extends "_layout" %}
+{% set relatedPublication = craft.entries.section('publication').relatedBy(entry).limit(12) %}
+{% block content %}
+<div class="feature-container lazy unloaded">
+  <div class="top-hero lazy unloaded">
+    {% set heroImage = entry.featureHeader.first().heroImage.first().getUrl() ?? null %}
+    <div class="hero-img inv" style="background-image:url('{{ heroImage }}');"></div>
+    <p class="top-header large-text regular-medium">{{ entry.featureHeader.first().pageTitle }}</p>
+    <p class="inventory-copy mid-text gray-text regular-medium">{{ entry.featureHeader.first().bodyCopy }}</p>
+  </div>
+  <div class="related-artist-c lazy unloaded">
+    <p class="ra-header regular-medium large-text">Selected Books and Catalogues</p>
+    <div class="grid-row">
+      {% for item in relatedPublication %}
+      <div class="grid-item-c">
+        <div class="grid-tb-c square">
+          {% set myImage = item.thumbnail.first().getUrl() ?? null %}
+          <a href="{{ item.url() }}"><div class="thumb-img inv" style="background-image:url('{{ myImage }}');"></div></a>
+        </div>
+          <div class="grid-detail-c">
+            <a href="{{ item.url() }}"><p class="exh-title mid-text regular-medium">{{ item.inventoryTitle }}</p></a>
+            {% set links = craft.entries.section('artistHome').relatedTo(item.artistname.first().category.first()).find(1) %}
+            {% if links|length > 0 %}
+              {% for entry in links[:1] %}
+                <a href="{{ entry.url()}}"><p class="artist-name mid-text purple regular-semibold">{{ entry.artistname.first().category.first().title }}</p></a>
+              {% endfor %}
+            {% else %}
+              <p class="artist-name mid-text purple regular-semibold">{{ item.artistname.first().category.first().title }}</p>
+            {% endif %}
+            <p class="onview med-text regular-medium gray-text" >
+                {{ item.onView|date("M d, Y")}}
+            </p>
+          </div>
+      </div>
+      {% endfor %}
+      <div class="btn-wrapper"><a href="{{ siteUrl }}inventory_overview"><div class="see-all-btn"><p class="btn-text small-text regular-medium">See Publication Index</p><img class="arrow" src="{{ siteUrl }}/src/images/arrow.svg"></div></a></div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+

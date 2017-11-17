@@ -1,0 +1,44 @@
+{% extends "_layout" %}
+{% set relatedExhibitions = craft.entries.section('exhibition').relatedBy(entry).limit(4) %}
+{% set relatedInventory = craft.entries.section('inventory').relatedBy(entry).limit(4) %}
+{% block content %}
+<div class="inventory-container lazy unloaded">
+  <p class="artist-header large-text lazy unloaded regular-medium">{{ entry.artistname.first().category.first().title }}, <span class="inv-title">{{ entry.inventoryTitle }}</p>
+  <div class="artist-col-c">
+    <div class="col-wrapper" style="position:relative; overflow:hidden; width: 100%;">
+    {% include "snippets/_expand-panel" with { entry: entry, page:"inventory" , relatedExhibitions: relatedExhibitions } %}
+    <div class="col-left lazy unloaded">
+      <div class="right-hero-img" style="background-image: url('{{ entry.thumbnail.first().getUrl() }}');"></div>
+    </div>
+  </div>
+  <div class="related-artist-c lazy unloaded">
+    <p class="ra-header regular-medium large-text">Related Inventory</p>
+    <div class="grid-row">
+      {% for item in relatedInventory %}
+      <div class="grid-item-c">
+        <div class="grid-tb-c">
+          {% set myImage = item.thumbnail.first().getUrl() ?? null %}
+          <a href="{{ item.url() }}"><div class="thumb-img inv" style="background-image:url('{{ myImage }}');"></div></a>
+        </div>
+          <div class="grid-detail-c">
+            <a href="{{ item.url() }}"><p class="exh-title mid-text regular-medium">{{ item.inventoryTitle }}</p></a>
+            {% set links = craft.entries.section('artistHome').relatedTo(item.artistname.first().category.first()).find(1) %}
+            {% if links|length > 0 %}
+              {% for entry in links[:1] %}
+                <a href="{{ entry.url()}}"><p class="artist-name mid-text purple regular-semibold">{{ entry.artistname.first().category.first().title }}</p></a>
+              {% endfor %}
+            {% else %}
+              <p class="artist-name mid-text purple regular-semibold">{{ item.artistname.first().category.first().title }}</p>
+            {% endif %}
+            <p class="onview med-text regular-medium gray-text" >
+                {{ item.onView|date("M d, Y")}}
+            </p>
+          </div>
+      </div>
+      {% endfor %}
+      <div class="btn-wrapper"><a href="{{ siteUrl }}inventory_overview"><div class="see-all-btn"><p class="btn-text small-text regular-medium">See Inventory Index</p><img class="arrow" src="{{ siteUrl }}/src/images/arrow.svg"></div></a></div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+

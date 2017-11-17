@@ -1,0 +1,281 @@
+{% block overview %}
+{% switch header %}
+{% case "Artist Index" %}
+{% set data = ['artistHome', 'artistName'] %}
+{% case "News & Press" %}
+{% set data = ['news, archivedPress', 'null'] %}
+{% case "Past Exhibitions" %}
+{% set data = ['exhibition', 'null'] %}
+{% default %}
+{% set data = ['artistHome', 'artistName'] %}
+{% endswitch %}
+<div class="overview">
+  <div class="overview-header">
+    <p class="overview-title large-text regular-medium">{{ header }}</p>
+    <div class="filters-c">
+      <div class="filter-col">
+        <p class="grid-select med-text gray-text regular-medium"><span class="grid active" data-view="grid-view">Grid View</span> / <span class="list" data-view="list-view">List View</span></p>
+      </div>
+      <div class="filter-col" style="pointer-events: none; opacity: 0.4;">
+        <div class="expand-btn" {% if data[0] == "news" %} style="display:none;"{% endif %} ><span class="lv"></span><span class="lh"></span></div>
+        <p class="filter-text regular-medium med-text" {%if data[0] == "news" %} style="cursor:none; color: #ccc;"{% endif %}>View Filters</span>
+      </div>
+      <div class="filter-col sort">
+        <div class="sort-btn">
+          <img class="arrow-down" src="{{ siteUrl }}src/images/arrow_down.svg"></img>
+          <p class="sort-text med-text regular-medium">Sort by</p>
+        </div>
+      </div>
+      <div class="order-expand">
+        <div class="order-col">
+          <div class="checkbox-c">
+            <div class="checkbox" data-filter="Name"></div><p class="category-title gray-text regular-medium small-text">Name</p>
+          </div>
+          <div class="checkbox-c">
+            <div data-filter="A - Z" class="checkbox"></div><p class="category-title gray-text regular-medium small-text">A - Z</p>
+          </div>
+          <div class="checkbox-c">
+            <div data-filter="Date" class="checkbox"></div><p class="category-title gray-text regular-medium small-text">Date</p>
+          </div>
+        </div>
+      </div>
+      <div class="filters-expand">
+        {% if data[0] == "artistHome" or data[0] =="exhibition" %}
+        <div class="category-col">
+          <p class="category-header gray-text regular-medium mid-text">Decade:</p>
+          {% for category in craft.categories.group('Decade') %}
+          <div class="checkbox-c">
+            <div class="checkbox nav-filter" data-target="{{ category.title }}"></div>
+            <p class="category-title gray-text regular-medium small-text">{{ category.title }}</p>
+          </div>
+          {% endfor %}
+        </div>
+        <div class="category-col">
+          <p class="category-header gray-text regular-medium mid-text">Medium:</p>
+          {% for category in craft.categories.group('Medium') %}
+          <div class="checkbox-c">
+            <div class="checkbox nav-filter" data-target="{{ category.title }}"></div>
+            <p class="category-title gray-text regular-medium small-text">{{ category.title }}</p>
+          </div>
+          {% endfor %}
+        </div>
+        <div class="category-col">
+          <p class="category-header gray-text regular-medium mid-text">Themes:</p>
+          {% for category in craft.categories.group('Themes') %}
+          <div class="checkbox-c">
+            <div class="checkbox nav-filter" data-target="{{ category.title }}"></div>
+            <p class="category-title gray-text regular-medium small-text">{{ category.title }}</p>
+          </div>
+          {% endfor %}
+        </div>
+        {#
+        <div class="category-col">
+          <p class="category-header gray-text regular-medium mid-text">Gallery:</p>
+          <div class="checkbox-c">
+            <div class="checkbox nav-filter" data-target="Currently Represented"></div><p class="category-title gray-text regular-medium small-text">Currently Represented</p>
+          </div>
+          <div class="checkbox-c">
+            <div class="checkbox nav-filter" data-target="Previously Represented"></div><p class="category-title gray-text regular-medium small-text">Previously Represented</p>
+          </div>
+        </div>
+        #}
+        {% endif %}
+      </div>
+    </div>
+  </div>
+  <div class="views-c">
+      <div class="list-view">
+        {% if data[0] == "artistHome" %}
+          {% set artists = craft.entries.section(data[0]).order('title asc').limit(null) %}
+          {% set artistsGrouped = artists|group('artistname.first().lastName[:1]|upper') %}
+          {% set sortedGroup = artistsGrouped|supersort('ksort') %}
+          {% for letter, artistsInGroup in sortedGroup %}
+            {% for artist in artistsInGroup %}
+              {% set myImage = artist.thumbnail.first().getUrl() ?? artist.exhibitionSlideshow.slide.first().slideshowImage.first().getUrl() ?? null %}
+              <div class="list-row lazy unloaded">
+                {% if new_letter is defined and new_letter == letter or letter == "" %}
+                  <div class="alphabet-c"><span class="letter large-text regular-semibold">&nbsp;</span></div>
+                {% else %}
+                  <div class="alphabet-c"><span class="letter large-text regular-semibold">{{ letter }}</span></div>
+                {% endif %}
+                {% set new_letter = letter %}
+                <div class="main-row-c">
+                  <a href="{{ artist.url() }}"><div class="thumbnail-img-c"><div class="thumb-img" style="background-image:url('{{ myImage }}');"></div></div></a>
+                  <div class="content-c"><p class="artist-name regular-medium mid-text">{{ artist.artistname.first().category.first().title }}</p></div>
+                  <a href="{{ artist.url() }}"><div class="detail-c"><p class="view-d-btn med-text regular-medium">View Details</p></div></a>
+                </div>
+              </div>
+            {% endfor %}
+          {% endfor %}
+        {% elseif data[0] == "exhibition" %}
+          {% set sortedEntries = craft.entries.section(data[0]).order('date desc').limit(null) %}
+          {% set yearGroup = sortedEntries|group('onView.year') %}
+          {% set yearGroup = yearGroup|supersort('krsort') %}
+          {% for letter, artistsInGroup in yearGroup %}
+            {% for artist in artistsInGroup %}
+              {% set myImage = artist.thumbnail.first().getUrl() ?? artist.exhibitionSlideshow.slide.first().slideshowImage.first().getUrl() ?? null %}
+              <div class="list-row lazy unloaded">
+                {% if new_letter is defined and new_letter == letter or letter == "" %}
+                  <div class="alphabet-c"><span class="letter large-text regular-semibold">&nbsp;</span></div>
+                {% else %}
+                  <div class="alphabet-c"><span class="letter large-text regular-semibold">{{ letter }}</span></div>
+                {% endif %}
+                {% set new_letter = letter %}
+                <div class="main-row-c">
+                  <a href="{{ artist.url() }}"><div class="thumbnail-img-c"><div class="thumb-img" style="background-image:url('{{ myImage }}');"></div></div></a>
+                  <div class="content-c">
+                    <p class="title regular-medium mid-text">{{ artist.exhibitionTitle }}</p>
+				   {% if artist.groupShow == "0" %} 
+                    {% if artist.artistname.first() is not null %}
+                    {% set links = craft.entries.section('artistHome').relatedTo(artist.artistname.first().category.first()).find(1) %}
+                    {% if links|length > 0 %}
+                    {% for item in links[:1] %}
+                    <a href="{{ item.url()}}"><p class="artist-name mid-text purple regular-semibold">{{ artist.artistname.first().category.first().title }}</p></a>
+                    {% endfor %}
+                    {% else %}
+                    <p class="artist-name mid-text purple regular-semibold">{{ artist.artistname.first().category.first().title }}</p>
+                    {% endif %}
+                    {% endif %}
+					{% else %}
+					<p class="artist-name mid-text purple regular-semibold">Group Show</p>
+					{% endif %}
+                    <p class="date gray-text med-text regular-medium">
+                      {% if artist.onView is not null and artist.endDate is not null and artist.onView.year != artist.endDate.year %}
+                        {{ artist.onView|date("M Y")}} – {{ artist.endDate|date("M Y") }}
+                      {% else %}
+                        {{ artist.onView|date("M d")}} – {{ artist.endDate|date("M d, Y") }}
+                      {% endif %}
+                    </p>
+                  </div>
+                  <a href="{{ artist.url() }}"><div class="detail-c"><p class="view-d-btn med-text regular-medium">View Details</p></div></a>
+                </div>
+              </div>
+            {% endfor %}
+          {% endfor %}
+        {% elseif data[0] == "news, archivedPress" %}
+          {% set sortedEntries = craft.entries.section(data[0]).order('date desc') %}
+          {% set yearGroup = sortedEntries|group('date.year') %}
+          {% set yearGroup = yearGroup|supersort('krsort') %}
+          {% for letter, artistsInGroup in yearGroup %}
+            {% for artist in artistsInGroup %}
+              {% set myImage = artist.thumbnail.first().getUrl() ?? artist.exhibitionSlideshow.slide.first().slideshowImage.first().getUrl() ?? null %}
+              <div class="list-row lazy unloaded">
+                {% if new_letter is defined and new_letter == letter or letter == "" %}
+                  <div class="alphabet-c"><span class="letter large-text regular-semibold">&nbsp;</span></div>
+                {% else %}
+                  <div class="alphabet-c"><span class="letter large-text regular-semibold">{{ letter }}</span></div>
+                {% endif %}
+                {% set new_letter = letter %}
+                <div class="main-row-c">
+                  <a href="{{ artist.url() }}"><div class="thumbnail-img-c"><div class="thumb-img" style="background-image:url('{{ myImage }}');"></div></div></a>
+                  <div class="content-c">
+                    <p class="pub-date gray-text med-text regular-medium">{{ artist.date|date("M d, Y") }}</p>
+                    <p class="publication gray-text med-text stanley-regular">{{ artist.publication }}</p>
+                    {% if artist.artistname.first() is not null %}
+                    {% set links = craft.entries.section('artistHome').relatedTo(artist.artistname.first().category.first()).find(1) %}
+                      {% if links|length > 0 %}
+                      {% for item in links[:1] %}
+                        <a href="{{ item.url()}}"><p class="artist-name mid-text purple regular-semibold">{{ artist.artistname.first().category.first().title }}</p></a>
+                      {% endfor %}
+                      {% else %}
+                        <p class="artist-name mid-text purple regular-semibold">{{ artist.artistname.first().category.first().title }}</p>
+                      {% endif %}
+                    {% endif %}
+                    <a href="{{ artist.url()}}"><p class="title regular-medium mid-text">{{ artist.newsTitle }}</p></a>
+                  </div>
+                  <a href="{{ artist.url() }}"><div class="detail-c"><p class="view-d-btn med-text regular-medium">View Details</p></div></a>
+                </div>
+              </div>
+            {% endfor %}
+          {% endfor %}
+          {% endif %}
+      </div>
+      <div class="grid-view">
+        <div class="grid-wrapper">
+          {% set count = 1 %}
+		  {% if data[0] == "exhibition" %}{% set pageEntries = pageEntries.order('date asc') %}{% endif %}
+          {% for entry in pageEntries %}
+          {% set myImage = entry.thumbnail.first().getUrl() ?? entry.exhibitionSlideshow.slide.first().slideshowImage.first().getUrl() ?? null %}
+          {% set categories = craft.categories.relatedTo(entry) %}
+          <div data-count={{ count }} class="grid-item-c lazy unloaded active" data-categories='[{% set index = 0 %}{% for category in categories %}"{{ category }}"{% set index = index + 1 %}{% if index != categories|length %},{% endif %}{% endfor %}]'>
+            <div class="grid-tb-c">
+              <a href="{{ entry.url() }}">
+                <div class="thumb-img" style="background-image:url('{{ myImage }}');" ></div>
+              </a>
+            </div>
+            <div class="grid-detail-c">
+              {% if data[0] == "news, archivedPress" %}
+              <p class="pub-date gray-text med-text regular-medium">{{ entry.date|date("M d, Y") }}</p>
+              <p class="publication gray-text med-text stanley-regular">{{ entry.publication }}</p>
+              {% if entry.artistname.first() is not null %}
+              {% set links = craft.entries.section('artistHome').relatedTo(entry.artistname.first().category.first()).find(1) %}
+              {% if links|length > 0 %}
+              {% for item in links[:1] %}
+              <a href="{{ item.url()}}"><p class="artist-name mid-text purple regular-semibold">{{ entry.artistname.first().category.first().title }}</p></a>
+            {% endfor %}
+            {% else %}
+            <p class="artist-name mid-text purple regular-semibold">{{ entry.artistname.first().category.first().title }}</p>
+            {% endif %}
+            {% endif %}
+            <a href="{{ entry.url() }}"><p class="show-title  mid-text regular-medium">{{ entry.newsTitle }}</p></a>
+            {% endif %}
+            {% if data[0] == "artistHome" %}
+            <a href="{{ entry.url() }}"><p class="artist-name mid-text regular-semibold purple">{{ entry.artistname.first().category.first().title }}</p></a>
+            {% endif %}
+            {% if data[0] == "exhibition" %}
+            <a href="{{ entry.url() }}"><p class="show-title mid-text regular-medium">{{ entry.exhibitionTitle }}</p></a>
+			{% if entry.groupShow == "0" %} 
+            {% if entry.artistname.first() is not null %}
+            {% set links = craft.entries.section('artistHome').relatedTo(entry.artistname.first().category.first()).find(1) %}
+            {% if links|length > 0 %}
+            {% for item in links[:1] %}
+            <a href="{{ item.url()}}"><p class="artist-name mid-text purple regular-semibold">{{ entry.artistname.first().category.first().title }}</p></a>
+            {% endfor %}
+            {% else %}
+            <p class="artist-name mid-text purple regular-semibold">{{ entry.artistname.first().category.first().title }}</p>
+            {% endif %}
+            {% endif %}
+			{% else %}
+				<p class="artist-name mid-text purple regular-semibold">Group Show</p>
+			{% endif %}
+            <p class="date gray-text med-text regular-medium">
+              {% if entry.onView is not null and entry.endDate is not null and entry.onView.year != entry.endDate.year %}
+                {{ entry.onView|date("M Y")}} – {{ entry.endDate|date("M Y") }}
+              {% else %}
+                {{ entry.onView|date("M d")}} – {{ entry.endDate|date("M d, Y") }}
+              {% endif %}
+            </p>
+            {% endif %}
+          </div>
+        </div>
+        {% endfor %}
+        {% set placeholders = 4 - (pageEntries|length % 4) %}
+        {% for i in 1..placeholders %}
+            <div data-index={{i}} class="grid-item-c placeholder lazy unloaded active" data-categories=''>
+                <div class="grid-tb-c placeholder">
+                  <div class="thumb-img" style="background-image:url('');" ></div>
+              </div>
+              <div class="grid-detail-c"></div>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+  {#} //pagination controls
+  <div class="pagination-c">
+    {% if pageInfo.prevUrl %}
+    <a href="{{ pageInfo.prevUrl }}"><div class="page-arrow-btn left" style="margin: 10px 0;"><img class="arrow" src="{{ siteUrl }}/src/images/arrow.svg"></div></a>
+    {% endif %}
+    <div class="center-container">
+      <div class="page-arrow-btn number regular-medium small-text current">{{ pageInfo.currentPage }}</div>
+      {% for page, url in pageInfo.getNextUrls(5) %}
+      <a href="{{ url }}"><div class="page-arrow-btn regular-medium small-text number">{{ page }}</div></a>
+      {% endfor %}
+    </div>
+    {% if pageInfo.nextUrl %}
+    <a href="{{ pageInfo.nextUrl }}"><div class="page-arrow-btn right" style="float:right; margin: 10px 0;"><img class="arrow" src="{{ siteUrl }}/src/images/arrow.svg"></div></a>
+    {% endif %}
+  </div>
+  {#}
+</div>
+{% endblock %}

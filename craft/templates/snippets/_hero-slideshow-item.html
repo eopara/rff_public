@@ -1,0 +1,50 @@
+{% block hero %}
+<div class="hero-container">
+  <div class="hero-slideshow-c">
+    {% for slide in slideData %}
+    <div class="slide-container">
+      <div class="hero-img-c">
+        <img class="hero-img" src="{{ slide.slideshowImage.first().getUrl()|length }}">
+      </div>
+      <div class="hero-detail-c">
+        <p class="artist-name med-text regular-semibold">{{ slide.artist }}</p>
+        <p class="img-caption med-text regular-medium">{{ slide.detail }}</p>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+  <div class="slide-controls">
+    <div class="fullscreen-btn">
+      <div class="expand-btn"><span class="lv"></span><span class="lh"></span></div>
+    </div>
+    <p class="view-gallery regular-medium">View Gallery</p>
+    <div class="slide-arrow-btn left"><img class="arrow" src="{{ siteUrl }}/src/images/arrow.svg"></div>
+    <div class="slide-center-btn">
+      <p class="index">
+       {% for i in 0..slideData | length - 1 %}
+         <span data-uk-slideshow-item="{{ i }}">
+           <a href="">{{ i+1 }}</a>
+         </span>
+         {% endfor %}
+      </p>
+    </div>
+    <div class="slide-arrow-btn right"><img class="arrow" src="{{ siteUrl }}/src/images/arrow.svg"></div>
+  </div>
+
+  <div class="fullscreen-slideshow" style="display:none;">
+    <div class="full-slideshow-c">
+    {% for slide in slideData %}
+      <div class="slide-container">
+        <div class="full-img-c">
+          <img class="full-img" src="{{ slide.slideshowImage.first().getUrl() }}">
+        </div>
+        <div class="full-detail-c">
+          <p class="artist-name regular-medium">{{ slide.artist }}</p>
+          <p class="img-caption regular-medium">{{ slide.detail }}</p>
+        </div>
+      </div>
+    {% endfor %}
+    </div>
+  </div>
+</div>
+{% endblock %}

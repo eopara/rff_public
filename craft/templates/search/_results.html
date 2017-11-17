@@ -1,0 +1,54 @@
+{% set query = craft.request.getParam('q') %}
+{% set Exhibitions = craft.entries.section('exhibition').search(query).order('score').limit(5) %}
+{% set News = craft.entries.section('archivedPress, news').search(query).order('score').limit(5) %}
+{% set artistHome = craft.entries.section('artistHome').search(query).order('score').limit(1) %}
+{% if not craft.request.isAjax %}
+  {# Full page results content can go here #}
+  <h1>Search Results</h1>
+  <div class="fullpage">
+    <ul>
+      {% for entry in entries %}
+      <li><a href="{{ entry.url }}">{{ entry.title }}</a></li>
+      {% endfor %}
+    </ul>
+  </div>
+{% endif %}
+
+{% if craft.request.isAjax %}
+  <div id="search-results">
+    {% if artistHome|length >0 %}
+      <div class="row">
+        <p class="section-title med-text gray-text regular-medium">Artist</p>
+        <div class="entries-c">
+          {% for entry in artistHome %}
+            {% if entry.artistname.first() is not null %}<a href="{{ entry.url() }}"><p class="artistname purple med-text regular-semibold">{{ entry.artistname.first().category.first().title }}</p></a>{% endif %}
+          {% endfor %}
+        </div>
+      </div>
+    {% endif %}
+    {% if Exhibitions|length >0 %}
+      <div class="row">
+        <p class="section-title med-text gray-text regular-medium">Exhibitions</p>
+        <div class="entries-c">
+          {% for entry in Exhibitions %}
+            {% if entry.exhibitionTitle|length > 0 %}<a href="{{ entry.url() }}"><p class="title med-text regular-medium">{{ entry.exhibitionTitle }}</p></a>{% endif %}
+          {% endfor %}
+        </div>
+      </div>
+    {% endif %}
+    {% if News|length >0 %}
+      <div class="row">
+        <p class="section-title med-text gray-text regular-medium">News</p>
+        <div class="entries-c">
+          {% for entry in News %}
+            {% if entry.newsTitle|length > 0 %}<a href="{{ entry.url() }}"><p class="title med-text regular-medium">{{ entry.newsTitle }}</p></a>{% endif %}
+          {% endfor %}
+        </div>
+      </div>
+    {% endif %}
+    {% if News|length == 0 and Exhibitions|length == 0 and artistHome|length == 0 %}
+      <p class="stanley-regular gray-text large-text">No results found</p>
+    {% endif %}
+  </div>
+{% endif %}
+

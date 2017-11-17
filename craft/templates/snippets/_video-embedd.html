@@ -1,0 +1,28 @@
+{% block video %}
+<div class="small-video-c lazy unloaded">
+  <div class="thumb-wrapper">
+    <div class="slideshow-thumbnail-c">
+      {{ embeddLink|videoEmbed({ byline: 0, autoplay: 0, height: "400px" }) }}
+    </div>
+    <div class="caption-c">
+      <div class="controls-c">
+        <div class="gallery-btn">
+          <div class="slide-center-btn">
+            <p class="view-g regular-medium med-text purple">View Video</p>
+            <div class="expand-btn"><span class="lv"></span><span class="lh"></span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="fullscreen-slideshow">
+    <img class="close-btn" src="{{ siteUrl }}/src/images/close_btn.svg"></img>
+    <div class="full-video-c">
+      <div class="video-container">
+        {{ embeddLink|videoEmbed({ byline: 0, autoplay: 0, height: '800px' }) }}
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

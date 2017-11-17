@@ -1,0 +1,165 @@
+{% block homepage %}
+<div class="homepage-col">
+  <div class="col exh">
+    <div class="exhibit-c lazy unloaded wo">
+      <p class="col-header regular-medium large-text">{{ topSlide.header }}</p>
+      <div class="homepage-slideshow-c">
+        {% for item in topSlide.featured.first().exhibitionSlideshow%}
+        <div class="slide-container">
+          <div class="img-slide-c">
+            {% set myImage = item.slideshowImage.first().getUrl() ?? null %}
+            <a href="{{ topSlide.featured.first().url() }}">
+              <div class="slide-img" style="background-image:url('{{ myImage }}');"></div>
+            </a>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+        <div class="center-container">
+          {% if topSlide.featured.first().groupShow == "0" %}
+          {% set links = craft.entries.section('artistHome').relatedTo(topSlide.featured.first().artistname.first().category.first()).find(1) %}
+          {% if links|length > 0 %}
+              {% for entry in links %}
+                <a href="{{ entry.url()}}"><p class="artist-name large-text regular-medium">{{ topSlide.featured.first().artistname.first().category.first().title }}</p></a>
+              {% endfor %}
+            {% else %}
+              <p class="artist-name large-text regular-medium">{{ topSlide.featured.first().artistname.first().category.first().title }}</p>
+            {% endif %}
+          {% endif %}
+          <a href="{{ topSlide.featured.first().url() }}"><p class="exh-title large-text regular-medium">{{ topSlide.featured.first().exhibitionTitle }}</p></a>
+          <p class="on-view med-text regular-medium">On view until {{ topSlide.featured.first().endDate| date("M d, Y") }}</p>
+        </div>
+      <div class="dots purple">
+        {% for i in 0..topSlide.featured.first().exhibitionSlideshow | length - 1 %}
+        <div class="dot purple{% if i == 0 %} active {% endif %}" data-index="{{ i }}"></div>
+        {% endfor %}
+      </div>
+    </div>
+    <div class="exhibit-c lazy unloaded cu">
+      <p class="col-header regular-medium large-text">{{ botSlide.header }}</p>
+      <div class="homepage-slideshow-c">
+        {% for item in botSlide.featured.first().exhibitionSlideshow%}
+        <div class="slide-container">
+          <div class="img-slide-c">
+            {% set myImage = item.slideshowImage.first().getUrl() ?? null %}
+            <a href="{{ botSlide.featured.first().url() }}"><div class="slide-img" style="background-image:url('{{ myImage }}');"></div></a>
+          </div>
+        </div>
+        {% endfor %}
+     </div>
+        <div class="center-container">
+          {% if botSlide.featured.first().groupShow == "0" %}
+          {% set links = craft.entries.section('artistHome').relatedTo(botSlide.featured.first().artistname.first().category.first()).find(1) %}
+          {% if links|length > 0 %}
+              {% for entry in links %}
+                <a href="{{ entry.url()}}"><p class="artist-name large-text regular-medium">{{ botSlide.featured.first().artistname.first().category.first().title }}</p></a>
+              {% endfor %}
+            {% else %}
+              <p class="artist-name large-text regular-medium">{{ botSlide.featured.first().artistname.first().category.first().title }}</p>
+            {% endif %}
+          {% endif %}
+          <a href="{{ botSlide.featured.first().url() }}"><p class="exh-title large-text regular-medium">{{ botSlide.featured.first().exhibitionTitle }}</p></a>
+          <p class="on-view med-text regular-medium">On view until {{ botSlide.featured.first().endDate| date("M d, Y") }}</p>
+        </div>
+      <div class="dots purple">
+        {% for i in 0..botSlide.featured.first().exhibitionSlideshow | length - 1 %}
+        <div class="dot purple {% if i == 0 %} active {% endif %}" data-index="{{ i }}"></div>
+        {% endfor %}
+      </div>
+    </div>
+    <div class="btn-wrapper">
+      <a href="{{ siteUrl }}index.php/feature_exhibitions"><div class="see-all-btn small-text regular-medium"><p class="btn-text small-text regular-medium">See All Exhibitions</p><img class="arrow" src="{{ siteUrl }}src/images/arrow.svg"></div></a>
+    </div>
+    {% if twoColumns == "1" %}
+      <div class="exhibit-c news">
+        <p class="col-header regular-medium large-text">Press</p>
+        <div class="press-c lazy unloaded">
+          {% for entry in curatedPress.order('date') %}
+            {% set myImage = entry.thumbnail.first().getUrl() ?? entry.exhibitionSlideshow.slide.first().slideshowImage.first().getUrl() ?? null %}
+            <div class="row-element">
+              <a href="{{ entry.url() }}">
+              <div class="thumb-c">
+                <div class="thumb-img" style="background-image: url('{{ myImage }}');"></div>
+              </div>
+              </a>
+              <div class="right-detail-c">
+                <p class="pub-date regular-medium med-text gray-text">{{ entry.date|date("M d, Y") }}</p>
+                <p class="pub stanley-regular med-text gray-text">{{ entry.publication }}</p>
+                {%if entry.artistname.first() is not null %}
+                {% set links = craft.entries.section('artistHome').relatedTo(entry.artistname.first().category.first()).find(1) %}
+                  {% if links|length > 0 %}
+                      {% for item in links[:1] %}
+                        <a href="{{ item.url()}}"><p class="artist-name purple mid-text regular-semibold">{{ entry.artistname.first().category.first().title }}</p></a>
+                      {% endfor %}
+                    {% else %}
+                      <p class="artist-name mid-text purple regular-medium">{{ entry.artistname.first().category.first().title }}</p>
+                    {% endif %}
+                  {% endif %}
+                <a href="{{ entry.url() }}"><p class="title mid-text  regular-medium">{{ entry.newsTitle }}</p></a>
+                <p class="description med-text regular-medium gray-text">{{ entry.description }}</p>
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+        <div class="btn-wrapper">
+          <a href="{{ siteUrl }}index.php/news_overview"><div class="see-all-btn small-text regular-medium"><p class="btn-text small-text regular-medium">See All Press & News</p><img class="arrow" src="{{ siteUrl }}src/images/arrow.svg"></div></a>
+        </div>
+      </div>
+    {% endif %}
+  </div>
+  <div class="col np lazy unloaded">
+    <p class="col-header regular-medium large-text">News</p>
+    <div class="grid-c">
+      {% set index = 1 %}
+      {% for entry in featurePress.order('date desc') %}
+      {% set class = index is divisibleby(2) ? "right" : "left" %}
+      <div class="grid-item-c lazy unloaded {{ class }}">
+        <div class="grid-tb-c">
+          {% if entry.type.handle == "news" %}
+          {% set myImage = entry.thumbnail.first().getUrl() ?? entry.exhibitionSlideshow.slide.first().slideshowImage.first().getUrl() ?? null %}
+          <a href="{{ entry.url() }}"><div class="thumb-img" style="background-image:url('{{ myImage }}');"></div></a>
+          {% endif %}
+        </div>
+        <div class="grid-detail-c">
+          <p class="pub-date med-text regular-medium">{{ entry.date|date("M d, Y") }}</p>
+          <p class="publication med-text stanley-regular">{{ entry.publication }}</p>
+          {%if entry.artistname.first() is not null %}
+            {% set links = craft.entries.section('artistHome').relatedTo(entry.artistname.first().category.first()).find(1) %}
+              {% if links|length > 0 %}
+              {% for item in links[:1]%}
+                    <a href="{{ item.url()}}"><p class="artist-name mid-text regular-semibold">{{ entry.artistname.first().category.first().title }}</p></a>
+                  {% endfor %}
+                {% else %}
+                  <p class="artist-name mid-text regular-medium">{{ entry.artistname.first().category.first().title }}</p>
+                {% endif %}
+              {% endif %}
+          <a href="{{ entry.url() }}"><p class="title med-text regular-medium">{{ entry.newsTitle }}</p></a>
+        </div>
+      </div>
+      {% set index = index + 1 %}
+      {% endfor %}
+    </div>
+    <div class="btn-wrapper">
+      <a href="{{ siteUrl }}index.php/news_overview"><div class="see-all-btn"><p class="btn-text small-text regular-medium">See All Press</p><img class="arrow" src="{{ siteUrl }}src/images/arrow.svg"></div></a>
+    </div>
+    {% if twoColumns == "1"%}
+      <div class="fa-col-c lazy unloaded">
+        <p class="col-header regular-medium large-text">Featured Artist</p>
+        {% set item = featuredArtists.first() %}
+        {% set myImage = item.thumbnail.first().getUrl() ?? item.exhibitionSlideshow.slide.first().slideshowImage.first().getUrl() ?? null %}
+        <a href="{{ item.url() }}"><div class="thumbnail" style="background-image: url('{{ myImage }}');"></div></a>
+          <div class="detail-c">
+            <a href="{{ item.url() }}"><p class="artist-name large-text purple regular-medium">{{ item.title }}</p></a>
+            <p class="description med-text gray-text regular-medium">
+              {{ item.bio }}
+            </p>
+          </div>
+        </div>
+        <div class="btn-wrapper">
+          <a href="{{ siteUrl }}index.php/artist_overview"><div class="see-all-btn"><p class="btn-text small-text regular-medium">See Artist Index</p><img class="arrow" src="{{ siteUrl }}src/images/arrow.svg"></div></a>
+        </div>
+      </div>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

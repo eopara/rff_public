@@ -1,0 +1,16 @@
+{% block slideshow %}
+<div class="preview-slideshow-c lazy unloaded">
+  <div class="slideshow-container">
+    {% for item in slideData %}
+    <div class="slide-container">
+      {% set myImage = item.slideshowImage.first().getUrl() ?? null %}
+      <div class="slide-img" style="background-image: url('{{ myImage }}');"></div>
+    </div>
+    {% endfor %}
+  </div>
+  <div class="slide-control-wide">
+    <div class="slide-arrow-btn left"><img class="arrow" src="{{ siteUrl }}/src/images/arrow.svg"></div>
+    <div class="slide-arrow-btn right"><img class="arrow" src="{{ siteUrl }}/src/images/arrow.svg"></div>
+  </div>
+</div>
+{% endblock %}

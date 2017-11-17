@@ -1,0 +1,21 @@
+{% block hero %}
+<div class="hero-container">
+  {% set myImage = entry.thumbnail.first().getUrl() ?? entry.heroImage.hero.first().image.first().getUrl() ?? entry.slide.first().slideshowImage.first().getUrl() ?? null %}
+  <div class="hero-img-c">
+    <div class="hero-img" style="background-image:url('{{ myImage }}');"></div>
+  </div>
+  <div class="full-detail-c">
+    {% if entry.heroImage.hero.first().image is defined %}
+    <p class="artist-name med-text regular-semibold">{{ entry.heroImage.hero.first().artist }}</p>
+    <p class="img-caption med-text regular-medium">{{ entry.heroImage.hero.first().workTitle }}</p>
+    <p class="img-caption med-text regular-medium">{{ entry.heroImage.hero.first().misc }}</p>
+    {% elseif entry.exhibitionSlideshow.slide().first() is not null %}
+    <p class="artist-name med-text regular-semibold">{% if entry.exhibitionSlideshow.slide.first().artist|length > 0 %}{{ entry.exhibitionSlideshow.slide.first().artist }}{% endif %}</p>
+    <p class="img-caption med-text regular-medium">{% if entry.exhibitionSlideshow.slide.first().workTitle|length > 0 %}{{ entry.exhibitionSlideshow.slide.first().workTitle }}{% endif %}</p>
+    <p class="img-caption med-text regular-medium">{% if entry.exhibitionSlideshow.slide.first().misc|length > 0 %}{{ entry.exhibitionSlideshow.slide.first().misc }}{% endif %}</p>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}
+
+

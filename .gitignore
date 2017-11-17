@@ -1,0 +1,4 @@
+*.DS_Store
+*._*
+craft/storage/
+*.sass-cache/

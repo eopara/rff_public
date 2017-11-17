@@ -1,0 +1,16 @@
+{% extends "_layout" %}
+
+
+{% set entry = craft.entries.section('about').first() %}
+{% block content %}
+
+
+<!-- BEGIN MAIN TEXT -->
+
+<div class="about-container">
+  {% include "snippets/_timeline-main" with { entry: entry }  %}
+</div>
+
+{% endblock %}
+
+

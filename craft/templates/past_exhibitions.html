@@ -1,0 +1,56 @@
+{% extends "_layout" %}
+
+{% block content %}
+
+{% set sortOptions = [
+    {
+        label: 'Name',
+        value: 'title desc'
+    },
+    {
+        label: 'A - Z',
+        value: 'title asc'
+    },
+    {
+        label: 'Date',
+        value: 'date asc'
+    },
+] %}
+
+{% set selectedSortOption = craft.request.getParam('order', 'date desc') %}
+{% set orderJs %}
+  $(function(){
+
+    $('.order-col .checkbox').on("click", function(e){
+
+     // Get the value from the select
+     var filter = $(this).siblings('p').html();
+     var value;
+
+     if (filter == "Name") {
+        value = 'title desc';
+     }
+
+     else if (filter == "A - Z") {
+      value = 'title asc'
+     }
+
+     else if (filter == "Date") {
+      value = 'date asc'
+     }
+
+     console.log(value);
+     document.location.href = '{{ craft.request.getUrl() }}?order=' + value;
+   });
+  });
+{% endset %}
+{% includeJs orderJs %}
+
+<!-- BEGIN MAIN TEXT -->
+
+{% set pageEntries = craft.entries.section('exhibition').order(selectedSortOption).limit(null) %}
+{% include "snippets/_overview"  with { header:"Past Exhibitions", pageEntries: pageEntries } %}
+
+{% endblock %}
+
+

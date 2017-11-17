@@ -1,0 +1,62 @@
+{% extends "_layout" %}
+
+{% block content %}
+{% set sortOptions = [
+    {
+        label: 'Name',
+        value: 'title desc'
+    },
+    {
+        label: 'A - Z',
+        value: 'title asc'
+    },
+    {
+        label: 'Date',
+        value: 'date asc'
+    },
+] %}
+
+{% set selectedSortOption = craft.request.getParam('order', 'title asc') %}
+{% set orderJs %}
+  $(function(){
+
+    $('.order-col .checkbox').on("click", function(e){
+
+     // Get the value from the select
+     var filter = $(this).siblings('p').html();
+     var value;
+
+     if (filter == "Name") {
+        value = 'title desc';
+     }
+
+     else if (filter == "A - Z") {
+      value = 'title asc'
+     }
+
+     else if (filter == "Date") {
+      value = 'date asc'
+     }
+     document.location.href = '{{ craft.request.getUrl() }}?order=' + value + '&filter=' + filter;
+   });
+  });
+{% endset %}
+{% includeJs orderJs %}
+
+<!-- BEGIN MAIN TEXT -->
+{% set pageEntries = craft.entries.section('artistHome').order(selectedSortOption).all() %}
+{% set artistsGrouped = pageEntries|group('artistname.first().lastName[:1]|upper') %}
+{% set sortedGroup = artistsGrouped|supersort('ksort') %}
+{% set allEntries = [] %}
+{% for index, entries in sortedGroup %}
+	{% for entry in entries %}
+		{% set allEntries = allEntries|merge([entry]) %}
+	{% endfor %}
+{% endfor %}
+{% if selectedSortOption == 'date asc' %}
+{% set allEntries = allEntries|supersort('sortAs', 'date', SORT_NUMERIC) %}
+{% endif %}
+{% include "snippets/_overview" with { header:"Artist Index", pageEntries: allEntries } %}
+</div>
+{% endblock %}
+

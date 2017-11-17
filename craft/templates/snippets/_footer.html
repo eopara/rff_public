@@ -1,0 +1,41 @@
+{% block footer %}
+    {% set footer = craft.entries.section('footer').first() %}
+		<div class="footer">
+      <div class="footer-row top">
+        <p class="footer-copy mid-text gray-text regular-medium">{{ footer.footerDescription }}</p>
+        <div class="footer-link-c">
+          <div class="footer-col">
+            <a href="{{ siteUrl }}index.php/feature_exhibitions"><p class="footer-link purple small-text regular-medium">Exhibitions</p></a>
+            <a href="{{ siteUrl }}index.php/artist_overview"><p class="footer-link purple small-text regular-medium">Artists</p>
+            <a href="{{ siteUrl }}index.php/news_overview"><p class="footer-link purple small-text regular-medium">Press & News</p>
+              {#} <a href="{{ siteUrl }}inventory_overview"><p class="footer-link purple small-text regular-medium">Inventory</p> {#}
+          </div>
+          <div class="footer-col" >
+            {#}<a href="{{ siteUrl }}pub_overview"><p class="footer-link purple small-text regular-medium">Publications</p>{#}
+              <a href="{{ siteUrl }}index.php/contact"><p class="footer-link purple small-text regular-medium">Contact</p></a>
+            <a href="{{ siteUrl }}index.php/about"><p class="footer-link purple small-text regular-medium">About</p>
+          </div>
+          <div class="footer-col">
+            <p class="address gray-text small-text regular-medium">31 Mercer Street<br>New York, NY 10013</p>
+            <p class="contact small-text gray-text regular-medium">{{ footer.contactEmail }}<br><span class="phone regular-medium">phone </span><a class="gray-text" href="tel:{{ footer.phoneNumber }}">{{ footer.phoneNumber }}</span></a></p>
+            <div class="social-media-c">
+              <a href="https://www.facebook.com/RonaldFeldmanFineArts/" target="_blank" ><img class="icon" src="{{ siteUrl }}src/images/fb.svg"></a>
+              <a href="https://www.instagram.com/feldmangallery/" target="_blank" ><img class="icon" src="{{ siteUrl }}src/images/ig.svg"></a>
+              <a href="https://twitter.com/feldmangallery?lang=en" target="_blank" ><img class="icon" src="{{ siteUrl }}src/images/tw.svg"></a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="footer-row bot">
+        <div class="logo-c">
+          <img class="footer-logo" src="{{ siteUrl}}/src/images/rff_logo_footer.svg">
+          <p class="copyright small-text regular-medium gray-text">©{{ now.year }} Ronald Feldman Gallery</p>
+        </div>
+        <div class="newsletter-c">
+          <p class="signup gray-text small-text regular-medium">Sign up to receive email updates</p>
+          <input class="newsletter-field gray-text regular-medium med-text" placeholder="Email Address"></input>
+          <div class="submit-btn"><img class="arrow-btn" src="{{ siteUrl }}src/images/arrow.svg"></img></div>
+        </div>
+      </div>
+    </div>
+{% endblock %}

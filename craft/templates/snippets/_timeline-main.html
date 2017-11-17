@@ -1,0 +1,68 @@
+{% block timeline %}
+
+<div class="timeline-c">
+  <div class="main-container">
+    <p class="col-header regular-medium large-text">About Ronald Feldman Gallery</p>
+
+    {% if entry.exhibitionSlideshow.slide.first() is not null %}
+    <div class="hero-img-c lazy unloaded">
+      <div class="hero-img" style="background-image: url('{{ entry.exhibitionSlideshow.slide[0].slideshowImage.first().getUrl() }}"></div>
+      <div class="caption-c">
+        <p class="caption regular-medium med-text purple">{{ entry.exhibitionSlideshow.slide[0].misc }}</p>
+      </div>
+    </div>
+    {% endif %}
+    <div class="body-copy-c lazy unloaded inital">
+      <p class="body-copy stanley-regular med-text">{{ entry.aboutBody }}</p>
+    </div>
+    <div class="hero-img-c lazy unloaded">
+      <div class="hero-img" style="background-image: url('{{ entry.exhibitionSlideshow.slide[1].slideshowImage.first().getUrl() }}"></div>
+      <div class="caption-c">
+        <p class="caption regular-medium med-text purple">{{ entry.exhibitionSlideshow.slide[1].misc }}</p>
+      </div>
+    </div>
+    <div class="body-copy-c lazy unloaded next">
+      <p class="body-copy stanley-regular med-text">{{ entry.aboutBody2 }}</p>
+    </div>
+    <div class="hero-img-c lazy unloaded">
+      <div class="hero-img" style="background-image: url('{{ entry.exhibitionSlideshow.slide[2].slideshowImage.first().getUrl() }}"></div>
+      <div class="caption-c">
+        <p class="caption regular-medium med-text purple">{{ entry.exhibitionSlideshow.slide[2].misc }}</p>
+      </div>
+    </div>
+    <div class="body-copy-c lazy unloaded last">
+      <p class="body-copy stanley-regular med-text">{{ entry.aboutBodyLast }}</p>
+    </div>
+  </div>
+  <div class="side-container">
+    <p class="col-header regular-medium med-text gray-text">Timeline</p>
+    {% for item in entry.timelineSection %}
+    <div class="timeline-item-c lazy unloaded">
+      <p class="large-text regular-medium purple">{{ item.year }}</p>
+      <div class="img-c">
+        <a href="{{ item.exhibition.first().url() }}"><div class="thumbnail" style="background-image: url('{{ item.thumbnailImage.first().getUrl() }}'";></div></a>
+      </div>
+      <div class="detail-c">
+        <p class="date med-text regular-medium gray-text">{{ item.date|date("M d")}}</p>
+        {% set links = craft.entries.section('artistHome').relatedTo(item.artistName.first()).find(1) %}
+        {% if links|length > 0 %}
+          {% for entry in links[:1] %}
+            <a href="{{ entry.url()}}"><p class="artist-name mid-text purple regular-medium">{{ item.artistName.first().title }}</p></a>
+          {% endfor %}
+        {% else %}
+          <p class="artist-name mid-text purple regular-medium">{{ item.artistName.first().title }}</p>
+        {% endif %}
+        {% if item.exhibition.first() is not null %}
+          <a href="{{ item.exhibition.first().url() }}"><p class="description mid-text regular-medium">{{ item.exhibition.first().exhibitionTitle }}</p></a>
+        {% endif %}
+        <p class="description mid-text gray-text regular-medium">{{ item.description }}</p>
+      </div>
+    </div>
+    {% endfor %}
+    <div class="btn-wrapper">
+      <a href="{{ siteUrl }}index.php/past_exhibitions"><div class="see-all-btn"><p class="btn-text small-text regular-medium">See Past Exhibitions</p><img class="arrow" src="{{ siteUrl }}/src/images/arrow.svg"></div></a>
+    </div>
+  </div>
+</div>
+</div>
+{% endblock %}

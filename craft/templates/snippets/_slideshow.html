@@ -1,0 +1,18 @@
+{% block slideshow %}
+<div class="slideshow">
+	{% for item in slideItems %}
+		{% if item.inExhibitionSlideshow == "1" %}
+
+			<div class="slide-item-w slideshow-item">
+				<div class="slide-item-inner">
+					<div class="slide-item-image"><img src={{item.thumbnail.first().getUrl()}}></div>
+					<div class="top-line">
+						<p class="artist">{{item.artist}}</p>
+						<p class="detail">{{item.detail}}</p>
+					</div>
+				</div>
+			</div>
+		{% endif %}
+	{% endfor %}
+</div>
+{% endblock %}

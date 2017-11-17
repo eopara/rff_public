@@ -1,0 +1,16 @@
+{% extends "_layout" %}
+{% set firstFeatureEx = entry.exhibitionFeatureItem.slideshow1.first() %}
+{% set secFeatureEx = entry.exhibitionFeatureItem.slideshow2.last() %}
+{% set featurePress = craft.entries.section('news, archivedPress').limit(8) %}
+{% set featureArtists = entry.featuredArtists.curatedArtists.first().artistEntries %}
+{% set curatedPress = entry.curatedPress.curatedBlock.first().featuredPress %}
+{% block homepage %}
+<div class="homepage-container">
+  {% include "snippets/_homepage-col" with { topSlide: firstFeatureEx, botSlide: secFeatureEx, featuredPress: featurePress, curatedPress: curatedPress, featuredArtists: featureArtists, twoColumns: entry.twoColumns } %}
+  {% if entry.twoColumns == "0" %}
+    {% include "snippets/_homepage-fa" with { slideData: featureArtists } %}
+  {% endif %}
+</div>
+
+{% endblock %}
+

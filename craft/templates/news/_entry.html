@@ -1,0 +1,76 @@
+{% extends "_layout" %}
+{% set relatedPress = craft.entries({
+  section:        'news, archivedPress',
+  order:          'date',
+  limit:          4,
+  id:             'not ' ~ entry.id
+  }) %}
+
+{% block content %}
+
+<div class="news-container">
+  <!--<p class="artist-header large-text regular-medium">News & Press</p> -->
+  <p class="detail-text regular-medium lazy unloaded">
+    {% set links = craft.entries.section('artistHome').relatedTo(entry.artistname.first().category.first()).find(1) %}
+    {% if links|length > 0 %}
+      {% for item in links[:1]%}
+        <a href="{{ item.url() }}"><span class="artist-name purple large-text">{{ entry.artistname.first().category.first().title }}</span></a>
+      {% endfor %}
+    {% else %}
+        <span class="artist-name purple large-text">{{ entry.artistname.first().category.first().title }}</span>
+    {% endif %}
+    <span class="article-title regular-semibold large-text">{{ entry.newsTitle }}</span>
+  </p>
+  <div class="rule-line-wrapper">
+    <p class="detail-text regular-medium">
+      <span class="pub-name stanley-regular med-text">{{ entry.publication }}</span>
+      <span class="date med-text">{{ entry.date|date("M d, Y") }}</span>
+    </p>
+    {% if entry.heroImage.hero.first() is not null %}
+      {% include "snippets/_hero-img" with { entry: entry } %}
+    {% endif %}
+    {% if entry.featureslideshow|length > 0 %}
+      {% include "snippets/_hero-slideshow-item" with { slideData: entry.featureslideshow } %}
+    {% endif %}
+  </div>
+  <div class="news-detail-c lazy unloaded">
+    <div class="body-copy">
+      <p class="feature-text purple" style="display:none;" >{{ entry.newsDescription }}</p>
+      <span class="stanley-regular">{{ entry.body }}</span>
+    </div>
+  </div>
+  <div class="related-artist-c lazy unloaded">
+    <p class="ra-header regular-medium large-text">Related News & Press</p>
+    <div class="grid-row">
+      {% for item in entry.relatedPress.curatedBlock.first().relevantPress %}
+      <a href="{{ item.url() }}">
+      {% set myImage = item.thumbnail.first().getUrl() ?? item.exhibitionSlideshow.slide.first().slideshowImage.first().getUrl() ?? null %}
+      <div class="grid-item-c">
+        <div class="grid-tb-c">
+          <a href="{{ item.url() }}"><div class="thumb-img" style="background-image:url('{{ myImage }}');" ></div></a>
+        </div>
+          <div class="grid-detail-c">
+            <p class="pub-date med-text gray-text regular-medium">{{ item.date|date("M d, Y") }}</p>
+            <p class="publication med-text gray-text stanley-regular">{{ item.publication }}</p>
+            {%if item.artistname.first() is not null %}
+              {% set links = craft.entries.section('artistHome').relatedTo(item.artistname.first().category.first()).find(1) %}
+                {% if links|length > 0 %}
+                {% for item in links[:1]%}
+                      <a href="{{ item.url()}}"><p class="artist-name purple mid-text regular-semibold">{{ item.artistname.first().category.first().title }}</p></a>
+                    {% endfor %}
+                  {% else %}
+                    <p class="artist-name mid-text purple regular-semibold">{{ item.artistname.first().category.first().title }}</p>
+                  {% endif %}
+                {% endif %}
+            <a href="{{ item.url() }}"><p class="title med-text regular-medium">{{ item.newsTitle }}</p></a>
+          </div>
+      </div>
+      {% endfor %}
+      <div class="btn-wrapper">
+        <a href="{{ siteUrl }}index.php/news_overview.html"><div class="see-all-btn"><p class="btn-text small-text regular-medium">See All Press</p><img class="arrow" src="{{ siteUrl }}/src/images/arrow.svg"></div></a>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

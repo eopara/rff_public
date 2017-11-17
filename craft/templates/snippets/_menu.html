@@ -1,0 +1,112 @@
+{% block menu %}
+
+<div class="menu">
+  <div class="menu-btn-c main" data-ex-type="expand-nav">
+    <span class="l1"></span>
+    <span class="l2"></span>
+    <span class="l3"></span>
+  </div>
+  <div class="menu-btn-c search" data-ex-type="search-menu">
+    <img class="search-btn" src="{{ siteUrl }}/src/images/search.svg"></img>
+  </div>
+  <div class="menu-btn-c artist-index" data-ex-type="artist-expand"><p class="regular-medium">Artist Index</p></div>
+</div>
+<div class="expanded-nav">
+  <div class="menu-panel expand-nav">
+    <div class="expand-links-c">
+      <div class="mobile-links" style="display:none;">
+        <p class="mobile-search menu-link purple regular-medium large-text">Search</p>
+        <p class="mobile-ai menu-link purple regular-medium large-text">Artist Index</p>
+      </div>
+      <div class="border-c">
+        <a href="{{ siteUrl }}index.php/feature_exhibitions"><p class="menu-link purple regular-medium large-text">Exhibitions</p></a>
+        <a href="{{ siteUrl }}index.php/past_exhibitions"><p class="menu-link purple regular-medium large-text">Past Exhibitions</p></a>
+        <a href="{{ siteUrl }}index.php/artist_overview"><p class="menu-link purple regular-medium large-text">Artist Index</p></a>
+        <a href="{{ siteUrl }}index.php/news_overview"><p class="menu-link purple regular-medium large-text">News & Press</p></a>
+        <!--<a href="{{ siteUrl }}inventory_overview.html"><p class="-link gray-text regular-medium large-text" style="opacity: 0.4; cursor:none;">Inventory</p></a> -->
+        <!--<a href="{{ siteUrl }}pub_overview.html"><p class="-link gray-text regular-medium large-text" style="opacity: 0.4; cursor:none;">Publications</p></a> -->
+        <a href="{{ siteUrl}}index.php/about"><p class="menu-link purple regular-medium large-text">Gallery Info</p></a>
+        <a href="{{ siteUrl}}index.php/contact"><p class="menu-link purple regular-medium large-text">Contact</p></a></div>
+      <div class="social-media-c">
+        <a href="https://www.facebook.com/RonaldFeldmanFineArts/" target="_blank" ><img class="icon" src="{{ siteUrl }}src/images/fb.svg"></a>
+        <a href="https://www.instagram.com/feldmangallery/" target="_blank" ><img class="icon" src="{{ siteUrl }}src/images/ig.svg"></a>
+        <a href="https://twitter.com/feldmangallery?lang=en" target="_blank" ><img class="icon" src="{{ siteUrl }}src/images/tw.svg"></a>
+      </div>
+      <a href="https://www.artsy.net/ronald-feldman-fine-arts"><p class="small-link purple regular-medium small-text">Artsy</p></a>
+      <a href="http://www.artnet.com/galleries/ronald-feldman-fine-arts/"><p class="small-link purple regular-medium small-text">Artnet</p></a>
+    </div>
+  </div>
+  <div class="menu-panel search-menu">
+    <img class="close-btn" src="{{ siteUrl }}/src/images/close_btn.svg"></img><div class="search-c">
+      <div class="input-c">
+        <form id="search-form" method="post" action="{{ url('https://feldmangallery.com/index.php/search/results.html')}}">
+          {{ getCsrfInput() }}
+          <input type="search" name="q" id="search" class="input-field large-text regular-medium" placeholder="Search"></input>
+        </form>
+        <div class="results-container"></div>
+      </div>
+    </div>
+  </div>
+  <div class="menu-panel artist-expand">
+    <img class="close-btn" src="{{ siteUrl }}/src/images/close_btn.svg"></img>
+    <div class="artist-index-c">
+      <div class="artist-header-c">
+        <p class="ai-header mid-text regular-medium">Artist Index</p>
+        <a href="{{ siteUrl }}index.php/artist_overview"><div class="see-all"><p class="btn-text small-text regular-medium">See All Artists</p><img class="arrow" src="{{ siteUrl }}/src/images/arrow.svg"></img></div></a>
+      </div>
+      <div class="navigation-menu">
+        <p class="artist-nav regular-medium">Jump to:
+        <span class="a">A</span>
+        <span class="b">B</span>
+        <span class="c">C</span>
+        <span class="d">D</span>
+        <span class="e">E</span>
+        <span class="f">F</span>
+        <span class="g">G</span>
+        <span class="h">H</span>
+        <span class="i">I</span>
+        <span class="j">J</span>
+        <span class="k">K</span>
+        <span class="l">L</span>
+        <span class="m">M</span>
+        <span class="n">N</span>
+        <span class="o">O</span>
+        <span class="p">P</span>
+        <span class="q">Q</span>
+        <span class="r">R</span>
+        <span class="s">S</span>
+        <span class="t">T</span>
+        <span class="u">U</span>
+        <span class="v">V</span>
+        <span class="w">W</span>
+        <span class="x">X</span>
+        <span class="y">Y</span>
+        <span class="z">Z</span>
+        </p>
+      </div>
+      <div class="artist-list-c">
+        {% set entries = craft.entries.section('artistHome').limit(null).order('title asc') %}
+        {% set alphabet = ["A", "B","C", "D","E", "F","G","H","I", "J","K", "L","M", "N","O", "P","Q", "R","S", "T", "U", "V","W", "X", "Y", "Z"] %}
+        {% for letter in alphabet %}
+          {% set alphabetEntries = [] %}
+          {% for entry in entries %}
+            {% if letter  ==  entry.artistname.first().lastName[:1]|upper %}
+              {% set alphabetEntries = alphabetEntries|merge([entry]) %}
+            {% endif %}
+          {% endfor %}
+          {% if alphabetEntries|length > 0 %}
+          <div class="list-c">
+            <div class="alphabet-c"><span class="alphabet regular-semibold large-text purple" data-alphabet="{{ letter }}" >{{ letter }}</span></div>
+            <div class="name-col">
+              {% for entry in alphabetEntries %}
+              <a href="{{ entry.url() }}"><p class="artist-name regular-medium purple mid-text">{{ entry.artistname.first().category.first().title }}</p></a>
+              {% endfor %}
+            </div>
+          </div>
+          {% endif %}
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

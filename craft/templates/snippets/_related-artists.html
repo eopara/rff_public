@@ -1,0 +1,21 @@
+{% block related %}
+  <div class="related-artist-c lazy unloaded">
+    <p class="ra-header regular-medium large-text">Other Gallery Artists</p>
+    <div class="grid-row">
+      {% for item in related_artists %}
+      <a href="{{ item.url() }}">
+      {% set myImage = item.thumbnail.first().getUrl() ?? item.exhibitionSlideshow.slide.first().slideshowImage.first().getUrl() ?? null %}
+      <div class="grid-item-c">
+        <div class="grid-tb-c">
+          <div class="thumb-img" style="background-image: url('{{ myImage }}" ></div>
+        </div>
+          <div class="grid-detail-c">
+            <a href="{{ item.url()}}"><p class="artist-name mid-text purple regular-semibold">{{ item.artistname.first().category.first().title }}</p></a>
+          </div>
+      </div>
+      </a>
+      {% endfor %}
+      <div class="btn-wrapper"><a href="{{ siteUrl }}index.php/artist_overview.html"><div class="see-all-btn"><p class="btn-text regular-medium small-text">See Artist Index</p><img class="arrow" src="{{ siteUrl }}src/images/arrow.svg"></div></a></div>
+    </div>
+</div>
+{% endblock %}

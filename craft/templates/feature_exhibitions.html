@@ -1,0 +1,70 @@
+{% extends "_layout" %}
+{% block content %}
+<div class="feature-container lazy unloaded">
+  <p class="artist-header large-text regular-medium">Exhibitions</p>
+  <a href="{{ entry.heroExhibition.first().url }}">
+    {% include "snippets/_hero-img" with { entry: entry.heroExhibition.first() } %}
+  </a>
+  <div class="exhibition-hero lazy unloaded">
+    {% set links = craft.entries.section('artistHome').relatedTo(entry.heroExhibition.first().artistname.first().category.first()).find(1) %}
+    {% if links|length > 0 %}
+      {% for item in links[:1] %}
+        <a href="{{ item.url()}}"><p class="artist-name large-text purple regular-medium">{{ entry.heroExhibition.first().artistname.first().category.first().title }}</p></a>
+      {% endfor %}
+    {% else %}
+      <p class="artist-name large-text purple regular-medium">{{ entry.heroExhibition.first().artistname.first().category.first().title }}</p>
+    {% endif %}
+    <a href="{{ entry.heroExhibition.first().url() }}"><p class="show-title large-text regular-medium">{{ entry.heroExhibition.first().exhibitionTitle }}</p></a>
+    <p class="on-view gray-text med-text regular-medium">
+      {% if entry.heroExhibition.first().onView.year != entry.heroExhibition.first().endDate.year %}
+        {{ entry.heroExhibition.onView|date("M Y")}} – {{ entry.heroExhibition.first().endDate|date("M Y") }}
+      {% else %}
+        {{ entry.heroExhibition.first().onView|date("M d")}} – {{ entry.heroExhibition.first().endDate|date("M d, Y") }}
+      {% endif %}
+    </p>
+  </div>
+
+  {% set firstFeatureEx = entry.exhibitionFeatureItem.slideshow1.first() %}
+  {% set secFeatureEx = entry.exhibitionFeatureItem.slideshow2.last() %}
+
+  <div class="exhibitions-wrapper">
+    {% include "snippets/_exhibitions" with { leftFeature: firstFeatureEx, rightFeature: secFeatureEx } %}
+  </div>
+  <div class="related-artist-c lazy unloaded">
+    <p class="ra-header regular-medium large-text">Past Exhibitions</p>
+    <div class="grid-row">
+      {% for item in entry.relatedContent.featureGrid.first().relatedContent %}
+      <div class="grid-item-c">
+        <div class="grid-tb-c">
+          {% set myImage = item.thumbnail.first().getUrl() ?? item.exhibitionSlideshow.slide.first(). slideshowImage.first().getUrl() ?? null %}
+          <a href="{{ item.url() }}"><div class="thumb-img" style="background-image:url('{{ myImage }}');"></div></a>
+        </div>
+          <div class="grid-detail-c">
+            <a href="{{ item.url() }}"><p class="exh-title mid-text regular-medium">{{ item.exhibitionTitle }}</p></a>
+			{% if item.groupShow == 0 %}
+            {% set links = craft.entries.section('artistHome').relatedTo(item.artistname.first().category.first()).find(1) %}
+            {% if links|length > 0 %}
+              {% for entry in links[:1] %}
+                <a href="{{ entry.url()}}"><p class="artist-name mid-text purple regular-semibold">{{ entry.artistname.first().category.first().title }}</p></a>
+              {% endfor %}
+            {% else %}
+              <p class="artist-name mid-text purple regular-semibold">{{ item.artistname.first().category.first().title }}</p>
+            {% endif %}
+			{% else %}
+				<p class="artist-name mid-text purple regular-semibold">Group Show</p>
+			{% endif %}
+            <p class="onview med-text regular-medium gray-text" >
+              {% if item.onView.year != item.endDate.year %}
+                {{ item.onView|date("M Y")}} – {{ item.endDate|date("M Y") }}
+              {% else %}
+                {{ item.onView|date("M d")}} – {{ item.endDate|date("M d, Y") }}
+              {% endif %}
+            </p>
+          </div>
+      </div>
+      {% endfor %}
+      <div class="btn-wrapper"><a href="{{ siteUrl }}index.php/past_exhibitions"><div class="see-all-btn"><p class="btn-text small-text regular-medium">See All Past Exhibitions</p><img class="arrow" src="{{ siteUrl }}/src/images/arrow.svg"></div></a></div>
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,61 @@
+{% block slideshow %}
+<div class="small-slideshow-c lazy unloaded">
+  <div class="thumb-wrapper">
+    <div class="slideshow-thumbnail-c">
+      {% set myImage = slideData.slide.first().slideshowImage.first().getUrl() ?? null %}
+      <div class="thumb-img" style="background-image: url('{{ myImage }}')"></div>
+    </div>
+    <div class="caption-c">
+      <div class="full-detail-c">
+        <p class="artist-name purple med-text regular-semibold">{{ slideData.slide.first().artist }}</p>
+        <p class="img-caption purple med-text regular-medium">{{ slideData.slide.first().workTitle }}</p>
+      </div>
+      <div class="controls-c">
+        <div class="gallery-btn">
+          <div class="slide-center-btn">
+            <p class="view-g regular-medium med-text purple">View Gallery</p>
+            <div class="expand-btn"><span class="lv"></span><span class="lh"></span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="fullscreen-slideshow">
+    <img class="close-btn" src="{{ siteUrl }}/src/images/close_btn.svg"></img>
+    <div class="full-slideshow-c">
+      {% set slideIndex = 0 %}
+      {% for slide in slideData %}
+        <div class="slide-container" data-index="{{ slideIndex }}" >
+          <div class="full-img-c">
+            {% set myImage = slide.slideshowImage.first().getUrl() ?? null %}
+            <img class="full-img" data-lazy="{{ myImage }}"></img>
+          </div>
+          <div class="full-detail-c">
+            <p class="artist-name med-text purple regular-semibold">{{ slide.artist }}</p>
+            <p class="img-caption med-text purple regular-medium">{{ slide.workTitle }}</p>
+            <p class="img-caption med-text purple regular-medium">{{ slide.misc }}</p>
+            <p class="img-caption med-text purple regular-medium">{% if slide.date|length %}{{ slide.date|date("M d, Y") }}{% endif %}</p>
+            <p class="img-caption med-text purple regular-medium">{% if slide.medium|length %}{{ slide.medium }}{% endif %}</p>
+            <p class="img-caption med-text purple regular-medium">{% if slide.size|length %}{{ slide.size }}{% endif %}</p>
+            <p class="img-caption med-text purple regular-medium">{% if slide.photoCredit|length %}{{ slide.photoCredit }}{% endif %}</p>
+          </div>
+        </div>
+        {% set slideIndex = slideIndex + 1 %}
+      {% endfor %}
+    </div>
+    <div class="slide-controls">
+      <div class="slide-arrow-btn left"><img class="arrow" src="{{ siteUrl }}/src/images/arrow.svg"></div>
+      <div class="slide-center-btn">
+        <p class="index">
+         {% for i in 0..slideData | length - 1 %}
+           <span data-uk-slideshow-item="{{ i }}">
+             <a href="">{{ i+1 }}</a>
+           </span>
+           {% endfor %}
+        </p>
+      </div>
+      <div class="slide-arrow-btn right"><img class="arrow" src="{{ siteUrl }}/src/images/arrow.svg"></div>
+    </div>
+  </div>
+</div>
+{% endblock %}

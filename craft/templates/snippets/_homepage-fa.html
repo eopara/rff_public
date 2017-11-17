@@ -1,0 +1,23 @@
+{% block homepage %}
+<div class="homepage-fa">
+  <p class="col-header regular-medium large-text">Feature Artists</p>
+  <div class="split-c">
+    {% for item in slideData %}
+    <div class="fa-col-c">
+      {% set myImage = item.thumbnail.first().getUrl() ?? item.exhibitionSlideshow.slide.first().slideshowImage.first().getUrl() ?? null %}
+        <div class="img-c" style="background-image: url('{{ myImage }}');"></div>
+        <div class="detail-c">
+          <a href="{{ item.url() }}"><p class="artist-name large-text purple regular-medium">{{ item.title }}</p></a>
+          <p class="description med-text regular-medium gray-text">
+            {{ item.bio }}
+          </p>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+<div class="btn-wrapper">
+  <a href="{{ siteUrl }}artist_overview.html"><div class="see-all-btn"><p class="btn-text small-text regular-medium">See Artist Index</p><img class="arrow" src="{{ siteUrl }}/src/images/arrow.svg"></div></a>
+
+  </div>
+</div>
+{% endblock %}

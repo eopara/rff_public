@@ -1,0 +1,124 @@
+{% block expand %}
+<div class="col-right lazy unloaded">
+  {% if entry.groupShow == "1"%}
+  <div class="bio-c">
+    <p class="col-title med-text regular-medium">Artists</p>
+    <div class="expand-btn"><span class="lv"></span><span class="lh"></span></div>
+    <div class="expand-c">
+      <p class="bio regular-medium med-text purple">
+      <br>
+      {% for artist in entry.artistname %}
+        {% set links = craft.entries.section('artistHome').relatedTo(artist.category.first()).find(1) %}
+        {% if links|length > 0 %}
+        {% for item in links[:1] %}
+          <a href="{{ item.url() }}"><span class="artist-link">{{ artist.category.first().title }}</span></a><br>
+        {% endfor %}
+        {% endif %}
+      {% endfor %}
+      </p>
+    </div>
+  </div>
+  {% endif %}
+  <div class="bio-c">
+    {% set header = "Biography"%}
+    {% if page == "exhibition" %}
+    {% set header = "Description"%}
+    {% endif %}
+    <p class="col-title med-text regular-medium">{{ header }}</p>
+    <div class="expand-btn"><span class="lv close"></span><span class="lh close"></span></div>
+    <div class="expand-c active">
+      <p class="bio regular-medium med-text gray-text" style="text-align:left;">
+      {% if page =="inventory" %}
+      <br>{{ entry.inventoryTitle}}<br>
+        {{ entry.itemDate|date("M d, Y") }}<br>
+        <br>{{ entry.description }}
+      {% endif %}
+      <br>{{ entry.bio }}<br><br>
+      {% if page =="artist" %}
+        <a href="{{ entry.artistsCv.first().getUrl() }}" target="_blank"><span class="pdf"><img class="redirect" src="{{ siteUrl }}/src/images/down-arrow.svg">View CV</span></a><br><br>
+      {% endif %}
+      {% if entry.pressPacket.first()|length %}
+        <a href="{{ entry.pressPacket.first().getUrl() }}" target="_blank"><span class="pdf"><img class="redirect" src="{{ siteUrl }}/src/images/down-arrow.svg">View Press Packet</span></a><br><br>
+      {% endif %}
+          {% if page =="exhibition" %}
+          <a href="{{ entry.artistsCv.first().getUrl() }}" target="_blank"><span class="pdf"><img class="redirect" src="{{ siteUrl }}/src/images/down-arrow.svg">View Press Releases</span></a><br><br>
+            {% if entry.exhibitionChecklist.first() is not null %}
+            <a href="{{ entry.exhibitionChecklist.first().getUrl() }}" target="_blank"><span class="pdf"><img class="redirect" src="{{ siteUrl }}/src/images/down-arrow.svg">View Exhibition Checklist</span></a><br><br>
+              {% endif %}
+
+              {% if entry.groupShow == "0" %}
+              {% set links = craft.entries.section('artistHome').relatedTo(entry.artistname.first().category.first()).find(1) %}
+              {% if links|length > 0 %}
+              {% for item in links[:1] %}
+              <a href="{{ item.url() }}" target="_blank"><span class="pdf"><img class="redirect" src="{{ siteUrl }}/src/images/redirect.svg">View Artist</span></a><br><br>
+                {% endfor %}
+                {% endif %}
+                {% endif %}
+                {% endif %}
+                {% if entry.websiteUrl|length > 0 %}<a href="{{ entry.websiteUrl }}" target="_blank"><span class="website"><img class="redirect" src="{{ siteUrl }}/src/images/redirect.svg">Artist Website</span></a>{% endif %}
+      </p>
+    </div>
+  </div>
+  {% if entry.selectPress|length > 0 and entry.selectPress is defined %}
+  <div class="press-c">
+    <p class="col-title med-text regular-medium">Select Press</p>
+    <div class="expand-btn"><span class="lv"></span><span class="lh"></span></div>
+    <div class="expand-c">
+      {% for item in entry.selectPress %}
+      <div class="press-item">
+        {% set myImage = item.thumbnail.first().getUrl() ?? item.featureslideshow.slide.first().slideshowImage.first().getUrl() ?? null %}
+        <div class="press-img-c">
+          <a href="{{ item.url() }}">
+            <div class="thumb-img" style="background-image:url('{{ myImage }}');" ></div>
+          </a>
+        </div>
+        <p class="press regular-medium">
+            <span class="press-item">
+            <span class="date regular-medium med-text gray-text">{{ item.date|date("M d, Y") }}</span>
+            <span class="pub stanley-regular med-text gray-text">{{ item.publication }}</span>
+            <span class="artist regular-medium mid-text purple">{{ entry.artistname.first().category.first().title }}</span>
+            <a href="{{ item.url()}}"><span class="title regular-medium med-text">{{ item.newsTitle }}</span></a>
+            {% if entry.getSection() =="archivedPress"%}
+            <a href="{{item.url()}}"><span class="view-pdf gray-text regular-medium small-text">View PDF</span></a>
+            {% endif %}
+          </span>
+        </p>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+  {% endif %}
+  {% if page == "artist" and relatedExhibitions|length > 0 and relatedExhibitions is defined %}
+  <div class="exhibition-c">
+    <p class="col-title med-text regular-medium">Exhibitions</p>
+    <div class="expand-btn"><span class="lv"></span><span class="lh"></span></div>
+    <div class="expand-c">
+      {% for item in relatedExhibitions %}
+      <div class="expand-grid-item">
+        {% set myImage = item.thumbnail.first().getUrl() ?? item.exhibitionSlideshow.slide.first().slideshowImage.first().getUrl() ?? null %}
+        <div class="grid-tb-c">
+          <a href="{{ item.url() }}">
+            <div class="thumb-img" style="background-image:url('{{ myImage }}');" ></div>
+          </a>
+        </div>
+        <p class="exhibition regular-medium">
+        <span class="press-item">
+          <span class="date regular-medium med-text gray-text">{{ item.onView|date("M d, Y") }}</span>
+          <span class="artist regular-medium mid-text purple">{% if item.artistname.first() is not null %}{{ item.artistname.first().category.first().title }}{% endif %}</span>
+          <a href="{{ item.url }}"><span class="title gray-text regular-medium med-text">{{ item.exhibitionTitle }}</span></a>
+        </span>
+        </p>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+  {% endif %}
+  {% if relatedPublications is defined %}
+  <div class="pub-c">
+    <p class="col-title med-text regular-medium">Publications</p>
+    <div class="expand-btn"><span class="lv"></span><span class="lh"></span></div>
+    <div class="expand-c"></div>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

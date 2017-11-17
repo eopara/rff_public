@@ -1,0 +1,40 @@
+{% extends "_layout" %}
+
+{% set entry = craft.entries.section('contact').first() %}
+{% block content %}
+
+<div class="contact-container">
+  <p class="col-header regular-medium large-text">Contact</p>
+  <div class="section-container">
+    {% for section in entry.contactEmails %}
+    <div class="section-row">
+      <div class="right-c">
+        <p class="purple mid-text regular-medium">{{ section.sectionHeader }}</p>
+      </div>
+      <div class="left-c">
+        <p class="mid-text regular-medium">{% if section.contactName|length %}{{ section.contactName }}{% endif %}</p>
+        <p class="mid-text gray-text regular-medium">{{ section.contactInfo}}</p>
+        {% if section.pdf.first() is not null %}
+          <a href="{{ section.pdf.first().getUrl() }}" target="_blank"><p class="pdf small-text regular-medium">Download Form</p></a>
+        {% endif %}
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+  <div class="gallery-staff-c">
+    <p class="col-header regular-medium large-text">Gallery Staff</p>
+    <div class="col-container">
+      {% for item in entry.galleryStaff %}
+      <div class="contact-item">
+        <p class="purple mid-text regular-medium">{{ item.contactName }}</p>
+        <p class="gray-text mid-text regular-medium">{{ item.contactEmail }}</p>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
+{% endblock %}
+
+
+

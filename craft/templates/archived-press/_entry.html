@@ -1,0 +1,28 @@
+{% extends "_layout" %}
+{% block content %}
+<div class="archived-container">
+  <div class="row">
+  {% set myImage = entry.thumbnail.first().getUrl() ?? "../../../src/images/test.png" %}
+    <div class="row-col th">
+      <div class="thumb-c" style="background-image:url('{{ myImage }}');"></div>
+    </div>
+    <div class="row-col main">
+      <p class="date mid-text regular-medium gray-text">{{ entry.date|date("M d, Y") }}</p>
+      <p class="publication mid-text regular-medium gray-text">{{ entry.publication }}</p>
+      {% set links = craft.entries.section('artistHome').relatedTo(entry.artistname.first().category.first()).find(1) %}
+      {% if links|length > 0 %}
+        {% for item in links[:1] %}
+          <a href="{{ item.url()}}"><p class="artist-name large-text purple regular-medium">{{  entry.artistname.first().category.first().title }}</p></a>
+        {% endfor %}
+      {% else %}
+        <p class="artist-name large-text regular-medium purple">{{ entry.artistname.first().category.first().title }}</p>
+      {% endif %}
+      <p class="title large-text regular-medium">{{ entry.newsTitle }}</p>
+    </div>
+    <div class="row-col detail">
+      <a href="{{ entry.archivedPressPdf.first().getUrl() }}" download="{{ entry.title }}"><span class="pdf gray-text regular-medium med-text"><img class="redirect" src="{{ siteUrl }}/src/images/down-arrow.svg">Download PDF</span>
+      <a href="{{ entry.archivedPressPdf.first().getUrl() }}" target="_blank"><span class="pdf gray-text regular-medium med-text"><img class="redirect" src="{{ siteUrl }}/src/images/redirect.svg">View PDF</span>
+    </div>
+  </div>
+</div>
+{% endblock %}
