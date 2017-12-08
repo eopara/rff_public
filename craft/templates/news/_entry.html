@@ -10,7 +10,7 @@
 
 <div class="news-container">
   <!--<p class="artist-header large-text regular-medium">News & Press</p> -->
-  <p class="detail-text regular-medium lazy unloaded">
+  <p class="detail-text regular-medium lazy">
     {% set links = craft.entries.section('artistHome').relatedTo(entry.artistname.first().category.first()).find(1) %}
     {% if links|length > 0 %}
       {% for item in links[:1]%}
@@ -33,13 +33,13 @@
       {% include "snippets/_hero-slideshow-item" with { slideData: entry.featureslideshow } %}
     {% endif %}
   </div>
-  <div class="news-detail-c lazy unloaded">
+  <div class="news-detail-c lazy">
     <div class="body-copy">
       <p class="feature-text purple" style="display:none;" >{{ entry.newsDescription }}</p>
       <span class="stanley-regular">{{ entry.body }}</span>
     </div>
   </div>
-  <div class="related-artist-c lazy unloaded">
+  <div class="related-artist-c lazy">
     <p class="ra-header regular-medium large-text">Related News & Press</p>
     <div class="grid-row">
       {% for item in entry.relatedPress.curatedBlock.first().relevantPress %}

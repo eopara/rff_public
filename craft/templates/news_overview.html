@@ -38,7 +38,7 @@
      else if (filter == "Date") {
       value = 'date asc'
      }
-     document.location.href = '{{ craft.request.getUrl() }}?order=' + value;
+     document.location.href = '{{ craft.request.getUrl() }}?order=' + value + '&filter=' + filter;
    });
   });
 {% endset %}

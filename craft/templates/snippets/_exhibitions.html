@@ -1,5 +1,5 @@
 {% block exhibitions %}
-<div class="exhibitions-c lazy unloaded">
+<div class="exhibitions-c lazy">
   <div class="row">
     <div class="feat-col">
       <p class="col-title large-text regular-medium">{{ leftFeature.header }}</p>
@@ -25,7 +25,7 @@
 			<p class="artist-name mid-text purple regular-semibold">Group Show</p>
 		{% endif %}
         <a href="{{ leftFeature.featured.first().url() }}"><p class="exh-title large-text regular-medium">{{ leftFeature.featured.first().exhibitionTitle }}</p></a>
-        <p class="on-view med-text regular-medium">{% if "now"|date('Y-m-d') < leftFeature.featured.first().endDate|date('Y-m-d') %}On view starting {% endif %}{{ leftFeature.featured.first().endDate| date("M d, Y") }}</p>
+        <p class="on-view med-text regular-medium">{% if "now"|date('Y-m-d') < leftFeature.featured.first().endDate|date('Y-m-d') %}On view starting {% endif %}{{ leftFeature.featured.first().onView| date("M d, Y") }}</p>
       </div>
     </div>
     <div class="feat-col">
@@ -53,10 +53,10 @@
 		{% endif %}
         <a href="{{ rightFeature.featured.first().url() }}"><p class="exh-title large-text regular-medium">{{ rightFeature.featured.first().exhibitionTitle }}</p></a>
         <p class="on-view med-text regular-medium">
-          {% if entry.heroExhibition.first().onView.year != entry.heroExhibition.first().endDate.year %}
-            {{ entry.heroExhibition.onView|date("M Y")}} – {{ entry.heroExhibition.first().endDate|date("M Y") }}
+          {% if rightFeature.featured.first().onView.year != rightFeature.featured.first().endDate.year %}
+            {{ rightFeature.featured.first().onView|date("M d, Y")}} – {{ rightFeature.featured.first().endDate|date("M d, Y") }}
           {% else %}
-            {{ entry.heroExhibition.first().onView|date("M d")}} – {{ entry.heroExhibition.first().endDate|date("M d, Y") }}
+            {{ rightFeature.featured.first().onView|date("M d")}} – {{ rightFeature.featured.first().endDate|date("M d, Y") }}
           {% endif %}
         </p>
       </div>

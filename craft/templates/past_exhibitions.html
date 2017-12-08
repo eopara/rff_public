@@ -17,7 +17,7 @@
     },
 ] %}
 
-{% set selectedSortOption = craft.request.getParam('order', 'date desc') %}
+{% set selectedSortOption = craft.request.getParam('order', 'title desc') %}
 {% set orderJs %}
   $(function(){
 
@@ -40,7 +40,7 @@
      }
 
      console.log(value);
-     document.location.href = '{{ craft.request.getUrl() }}?order=' + value;
+     document.location.href = '{{ craft.request.getUrl() }}?order=' + value + '&filter=' + filter;
    });
   });
 {% endset %}

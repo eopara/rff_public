@@ -1,14 +1,14 @@
 {% extends "_layout" %}
 {% set related_artists = entry.relatedArtists.curatedBlock.first().relevantArtists.limit(null) %}
-{% set relatedExhibitions = craft.entries.section('exhibition').relatedTo(entry.artistname.first().category.first()).limit(4) %}
+{% set relatedExhibitions = craft.entries.section('exhibition').order('postDate desc').relatedTo(entry.artistname.first().category.first()).limit(4) %}
 {% block content %}
 <div class="artist-container">
-  <p class="artist-header large-text lazy unloaded regular-medium">{{ entry.artistname.first().category.first().title }}</p>
+  <p class="artist-header large-text lazy regular-medium">{{ entry.artistname.first().category.first().title }}</p>
   {% include "snippets/_hero-img" with { entry: entry } %}
   <div class="artist-col-c">
     <div class="col-wrapper" style="position:relative; overflow:hidden; width: 100%;" >
     {% include "snippets/_expand-panel" with { entry: entry, page:"artist" , relatedExhibitions: relatedExhibitions } %}
-      <div class="col-left lazy unloaded">
+      <div class="col-left lazy">
         {% include "snippets/_small-slideshow" with { slideData: entry.exhibitionSlideshow } %}
         {% if entry.videoEmbedLink|length %}
           {% include "snippets/_video-embedd" with { embeddLink: entry.videoEmbedLink } %}

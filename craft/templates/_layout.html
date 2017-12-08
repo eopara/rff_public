@@ -19,16 +19,19 @@
 <head>
 	<meta charset="utf-8" />
 	<title>{% if entry.title is defined %}{{ entry.title }} - {% endif %}Ronald Feldman Gallery</title>
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <meta name=”description” content=”Modern art gallery”>
   <meta name=”keywords” content=”SoHo, New York City, Contemporary Art, Art, Andy Warhol, Art History
 , Performance Art, Art Collection, Art Dealer, Art Collectors, Art Galleries NYC, Downtown Art, Modern Art, Art Museum , Art Gallery, Andy Warhol Prints, Art Shows NYC, Things to do in NYC, Things to do in SoHo, Things to do Downtown, Art Exhibit, Gallery”>
 	<link rel="home" href="{{ siteUrl }}" />
 	<link rel="stylesheet" href="{{ siteUrl }}/src/stylesheets/style.css"/>
 	<link rel="stylesheet" href="{{ siteUrl }}/src/stylesheets/slick.css"/>
+  <link rel="icon" type="image/vnd.microsoft.icon" href="{{siteUrl}}/favicon.ico" />
 	<script src="{{ siteUrl }}/src/js/jquery-3.2.1.min.js"></script>
 	<script src="{{ siteUrl }}/src/js/slick.min.js"></script>
 	<script src="{{ siteUrl }}/src/js/animator.js"></script>
+ 	<script src="{{ siteUrl }}src/js/clamp.js"></script>
+  <script src="{{ siteUrl }}src/js/footer-reveal.js"></script>
   <script type="text/javascript">
     window.csrfTokenName = "{{ craft.config.csrfTokenName|e('js') }}";
     window.csrfTokenValue = "{{ craft.request.csrfToken|e('js') }}";
@@ -36,7 +39,7 @@
 	<script src="{{ siteUrl }}/src/js/js.js"></script>
   <script type="text/javascript">
     $(document).ready(function() {
-        $('.arrow').each(function(){
+        $('.search-btn, .arrow').each(function(){
             var img         = $(this);
             var image_uri   = img.attr('src');
             $.get(image_uri, function(data) {
@@ -46,10 +49,25 @@
             }, 'xml');
 
         });
+
+   		var artistDescription = $('.homepage-col .col.np .fa-col-c .description')[0];
+        console.log(artistDescription);
+		if (artistDescription) {
+			$clamp(artistDescription, {clamp: 5, useNativeClamp: false});
+		}
     });
   </script>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-44702140-1"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+     
+      gtag('config', 'UA-44702140-1');
+    </script>
   </head>
-<body>
+<body class="body">
   <div class="page-container {% if craft.detect.isMobile %} mobile {% endif %}">
     {% include "snippets/_menu" with { artistEntries: craft.entries.section('artistHome').all() } %}
     <div class="body-container">
@@ -61,8 +79,6 @@
       {% endblock %}
     </div>
 	</div>
-  {% if craft.detect.isMobile == false %}
     {% include "snippets/_footer" %}
-  {% endif %}
 </body>
 </html>

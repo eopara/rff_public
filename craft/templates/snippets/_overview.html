@@ -45,7 +45,7 @@
           <p class="category-header gray-text regular-medium mid-text">Decade:</p>
           {% for category in craft.categories.group('Decade') %}
           <div class="checkbox-c">
-            <div class="checkbox nav-filter" data-target="{{ category.title }}"></div>
+            <div class="checkbox nav-filter" data-type="decade" data-target="{{ category.title }}"></div>
             <p class="category-title gray-text regular-medium small-text">{{ category.title }}</p>
           </div>
           {% endfor %}
@@ -54,7 +54,7 @@
           <p class="category-header gray-text regular-medium mid-text">Medium:</p>
           {% for category in craft.categories.group('Medium') %}
           <div class="checkbox-c">
-            <div class="checkbox nav-filter" data-target="{{ category.title }}"></div>
+            <div class="checkbox nav-filter" data-type="medium" data-target="{{ category.title }}"></div>
             <p class="category-title gray-text regular-medium small-text">{{ category.title }}</p>
           </div>
           {% endfor %}
@@ -63,7 +63,7 @@
           <p class="category-header gray-text regular-medium mid-text">Themes:</p>
           {% for category in craft.categories.group('Themes') %}
           <div class="checkbox-c">
-            <div class="checkbox nav-filter" data-target="{{ category.title }}"></div>
+            <div class="checkbox nav-filter" data-type="themes" data-target="{{ category.title }}"></div>
             <p class="category-title gray-text regular-medium small-text">{{ category.title }}</p>
           </div>
           {% endfor %}
@@ -193,14 +193,22 @@
       <div class="grid-view">
         <div class="grid-wrapper">
           {% set count = 1 %}
-		  {% if data[0] == "exhibition" %}{% set pageEntries = pageEntries.order('date asc') %}{% endif %}
           {% for entry in pageEntries %}
           {% set myImage = entry.thumbnail.first().getUrl() ?? entry.exhibitionSlideshow.slide.first().slideshowImage.first().getUrl() ?? null %}
           {% set categories = craft.categories.relatedTo(entry) %}
-          <div data-count={{ count }} class="grid-item-c lazy unloaded active" data-categories='[{% set index = 0 %}{% for category in categories %}"{{ category }}"{% set index = index + 1 %}{% if index != categories|length %},{% endif %}{% endfor %}]'>
-            <div class="grid-tb-c">
+          <div data-count={{ count }} class="grid-item-c lazy unloaded active" data-themes='[{% set index = 0 %}{% for category in categories.group('Themes') %}&#34;{{ category }}&#34;{% set index = index + 1 %}{% if index != (categories.group('Themes')|length) %}, {% endif %}{% endfor %}]' data-medium='[{% set index = 0 %}{% for category in categories.group('Medium') %}&#34;{{ category }}&#34;{% set index = index + 1 %}{% if index != categories.group('Medium')|length %}, {% endif %}{% endfor %}]' data-decade='[{% set index = 0 %}{% for category in categories.group('Decade') %}&#34;{{ category }}&#34;{% set index = index + 1 %}{% if index != categories.group('Decade')|length %}, {% endif %}{% endfor %}]'>
+            <div class="grid-tb-c {% if entry.type.handle =="news" and entry.highlighted == 1 %}news{% endif %}">
               <a href="{{ entry.url() }}">
+              {% if entry.type.handle == "news" %}
+                {% if entry.highlighted == "0" %}
+                  <div class="thumb-img" style="background-image:url('{{ myImage }}');" ></div>
+                {% else %}
+                <div class="outline-wrapper"><p class="thumb-text stanley-regular large-text purple" style="background-color:transparent; margin: 0 auto; text-align:center; vertical-align:middle; padding-top:25%;">{{ entry.newsDescription}}</p></div>
+                {% endif %}
+
+              {% else %}
                 <div class="thumb-img" style="background-image:url('{{ myImage }}');" ></div>
+              {% endif %}
               </a>
             </div>
             <div class="grid-detail-c">

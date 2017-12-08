@@ -1,13 +1,18 @@
 {% block menu %}
 
 <div class="menu">
+{% if craft.detect.isMobile %}
+  <div class="headers">
+    <a href="{{ siteUrl }}"><img src="{{ siteUrl }}/src/images/rff_logo.svg" class="header-font"></a>
+  </div>
+{% endif %}
   <div class="menu-btn-c main" data-ex-type="expand-nav">
     <span class="l1"></span>
     <span class="l2"></span>
     <span class="l3"></span>
   </div>
   <div class="menu-btn-c search" data-ex-type="search-menu">
-    <img class="search-btn" src="{{ siteUrl }}/src/images/search.svg"></img>
+    <img class="search-btn" src="{{ siteUrl }}src/images/search.svg"></img>
   </div>
   <div class="menu-btn-c artist-index" data-ex-type="artist-expand"><p class="regular-medium">Artist Index</p></div>
 </div>
@@ -28,7 +33,7 @@
         <a href="{{ siteUrl}}index.php/about"><p class="menu-link purple regular-medium large-text">Gallery Info</p></a>
         <a href="{{ siteUrl}}index.php/contact"><p class="menu-link purple regular-medium large-text">Contact</p></a></div>
       <div class="social-media-c">
-        <a href="https://www.facebook.com/RonaldFeldmanFineArts/" target="_blank" ><img class="icon" src="{{ siteUrl }}src/images/fb.svg"></a>
+        <a href="https://www.facebook.com/RonaldFeldmanGallery/" target="_blank" ><img class="icon" src="{{ siteUrl }}src/images/fb.svg"></a>
         <a href="https://www.instagram.com/feldmangallery/" target="_blank" ><img class="icon" src="{{ siteUrl }}src/images/ig.svg"></a>
         <a href="https://twitter.com/feldmangallery?lang=en" target="_blank" ><img class="icon" src="{{ siteUrl }}src/images/tw.svg"></a>
       </div>

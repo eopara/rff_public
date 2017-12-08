@@ -1,5 +1,5 @@
 {% block hero %}
-<div class="hero-container lazy unloaded">
+<div class="hero-container lazy">
   {% set myImage = entry.heroImage.hero.first().image.first().getUrl() ?? entry.thumbnail.first().getUrl() ?? entry.slide.first().slideshowImage.first().getUrl() ?? null %}
   <div class="hero-img-c">
     <div class="hero-img" style="background-image:url('{{ myImage }}');"></div>

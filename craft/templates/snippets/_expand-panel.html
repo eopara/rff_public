@@ -1,5 +1,5 @@
 {% block expand %}
-<div class="col-right lazy unloaded">
+<div class="col-right lazy">
   {% if entry.groupShow == "1"%}
   <div class="bio-c">
     <p class="col-title med-text regular-medium">Artists</p>
@@ -41,7 +41,7 @@
         <a href="{{ entry.pressPacket.first().getUrl() }}" target="_blank"><span class="pdf"><img class="redirect" src="{{ siteUrl }}/src/images/down-arrow.svg">View Press Packet</span></a><br><br>
       {% endif %}
           {% if page =="exhibition" %}
-          <a href="{{ entry.artistsCv.first().getUrl() }}" target="_blank"><span class="pdf"><img class="redirect" src="{{ siteUrl }}/src/images/down-arrow.svg">View Press Releases</span></a><br><br>
+          <a href="{{ entry.artistsCv.first().getUrl() }}" target="_blank"><span class="pdf"><img class="redirect" src="{{ siteUrl }}/src/images/down-arrow.svg">View Press Release</span></a><br><br>
             {% if entry.exhibitionChecklist.first() is not null %}
             <a href="{{ entry.exhibitionChecklist.first().getUrl() }}" target="_blank"><span class="pdf"><img class="redirect" src="{{ siteUrl }}/src/images/down-arrow.svg">View Exhibition Checklist</span></a><br><br>
               {% endif %}

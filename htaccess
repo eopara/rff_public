@@ -1,5 +1,8 @@
 <IfModule mod_rewrite.c>
 	RewriteEngine On
+	RewriteCond %{HTTPS} off
+	RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
 	#force https
 	RewriteEngine On 
 	RewriteCond %{HTTP_HOST} ^feldmangallery\.com [NC]

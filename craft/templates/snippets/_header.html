@@ -1,5 +1,5 @@
 {% block header %}
-	<div class="header">
+	<div class="header" {% if craft.detect.isMobile %}style="display:none;"{% endif %}>
     <a href="{{ siteUrl }}"><img src="{{ siteUrl }}/src/images/rff_logo.svg" class="header-font"></a>
 	</div>
 {% endblock %}

@@ -2,7 +2,7 @@
 
 {% set related_artists = craft.entries.section('exhibition').relatedBy('Genre').limit(4) %}
 {% block content %}
-<div class="exhibition-container lazy unloaded">
+<div class="exhibition-container lazy">
   <div class="exhibition-hero">
     <p class="show-title large-text regular-medium">{{ entry.exhibitionTitle }}</p>
     {% if entry.groupShow == "0" %}
@@ -50,7 +50,7 @@
           </div>
         {% endif %}
     </div>
-  <div class="related-artist-c lazy unloaded">
+  <div class="related-artist-c lazy">
     <p class="ra-header regular-medium large-text">Other Gallery Exhibitions</p>
     <div class="grid-row">
       {% set related_artists = entry.relatedExhibitions.curatedBlock.first().relevantExhibitions %}

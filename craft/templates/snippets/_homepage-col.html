@@ -1,7 +1,7 @@
 {% block homepage %}
 <div class="homepage-col">
   <div class="col exh">
-    <div class="exhibit-c lazy unloaded wo">
+    <div class="exhibit-c wo">
       <p class="col-header regular-medium large-text">{{ topSlide.header }}</p>
       <div class="homepage-slideshow-c">
         {% for item in topSlide.featured.first().exhibitionSlideshow%}
@@ -35,7 +35,7 @@
         {% endfor %}
       </div>
     </div>
-    <div class="exhibit-c lazy unloaded cu">
+    <div class="exhibit-c cu">
       <p class="col-header regular-medium large-text">{{ botSlide.header }}</p>
       <div class="homepage-slideshow-c">
         {% for item in botSlide.featured.first().exhibitionSlideshow%}
@@ -59,7 +59,7 @@
             {% endif %}
           {% endif %}
           <a href="{{ botSlide.featured.first().url() }}"><p class="exh-title large-text regular-medium">{{ botSlide.featured.first().exhibitionTitle }}</p></a>
-          <p class="on-view med-text regular-medium">On view until {{ botSlide.featured.first().endDate| date("M d, Y") }}</p>
+          <p class="on-view med-text regular-medium">On view starting {{ botSlide.featured.first().onView| date("M d, Y") }}</p>
         </div>
       <div class="dots purple">
         {% for i in 0..botSlide.featured.first().exhibitionSlideshow | length - 1 %}
@@ -68,19 +68,23 @@
       </div>
     </div>
     <div class="btn-wrapper">
-      <a href="{{ siteUrl }}index.php/feature_exhibitions"><div class="see-all-btn small-text regular-medium"><p class="btn-text small-text regular-medium">See All Exhibitions</p><img class="arrow" src="{{ siteUrl }}src/images/arrow.svg"></div></a>
+      <a href="{{ siteUrl }}index.php/feature_exhibitions"><div class="see-all-btn small-text regular-medium"><p class="btn-text small-text regular-medium">Exhibitions</p><img class="arrow" src="{{ siteUrl }}src/images/arrow.svg"></div></a>
     </div>
     {% if twoColumns == "1" %}
       <div class="exhibit-c news">
         <p class="col-header regular-medium large-text">Press</p>
-        <div class="press-c lazy unloaded">
+        <div class="press-c lazy">
           {% for entry in curatedPress.order('date') %}
             {% set myImage = entry.thumbnail.first().getUrl() ?? entry.exhibitionSlideshow.slide.first().slideshowImage.first().getUrl() ?? null %}
             <div class="row-element">
               <a href="{{ entry.url() }}">
+              {% if entry.highlighted == "0" %}
               <div class="thumb-c">
                 <div class="thumb-img" style="background-image: url('{{ myImage }}');"></div>
               </div>
+              {% else %}
+              <p class="thumb-img regular-medium large-text purple" style="background-color:transparent; margin: 0 auto; text-align:center; padding-top: 25%;">{{ entry.newsDescription}}</p>
+              {% endif %}
               </a>
               <div class="right-detail-c">
                 <p class="pub-date regular-medium med-text gray-text">{{ entry.date|date("M d, Y") }}</p>
@@ -107,17 +111,21 @@
       </div>
     {% endif %}
   </div>
-  <div class="col np lazy unloaded">
+  <div class="col np lazy">
     <p class="col-header regular-medium large-text">News</p>
     <div class="grid-c">
       {% set index = 1 %}
       {% for entry in featurePress.order('date desc') %}
       {% set class = index is divisibleby(2) ? "right" : "left" %}
-      <div class="grid-item-c lazy unloaded {{ class }}">
+      <div class="grid-item-c lazy {{ class }}">
         <div class="grid-tb-c">
           {% if entry.type.handle == "news" %}
-          {% set myImage = entry.thumbnail.first().getUrl() ?? entry.exhibitionSlideshow.slide.first().slideshowImage.first().getUrl() ?? null %}
-          <a href="{{ entry.url() }}"><div class="thumb-img" style="background-image:url('{{ myImage }}');"></div></a>
+            {% if entry.highlighted == "0" %}
+              {% set myImage = entry.thumbnail.first().getUrl() ?? entry.exhibitionSlideshow.slide.first().slideshowImage.first().getUrl() ?? null %}
+              <a href="{{ entry.url() }}"><div class="thumb-img" style="background-image:url('{{ myImage }}');"></div></a>
+            {% else %}
+               <div class="outline-wrapper"><a href="{{ entry.url() }}"><p class="thumb-text stanley-regular large-text purple" style="background-color:transparent; margin: 0 auto; text-align:center;">{{ entry.newsDescription}}</p></a></div>
+            {% endif %}
           {% endif %}
         </div>
         <div class="grid-detail-c">
@@ -143,7 +151,7 @@
       <a href="{{ siteUrl }}index.php/news_overview"><div class="see-all-btn"><p class="btn-text small-text regular-medium">See All Press</p><img class="arrow" src="{{ siteUrl }}src/images/arrow.svg"></div></a>
     </div>
     {% if twoColumns == "1"%}
-      <div class="fa-col-c lazy unloaded">
+      <div class="fa-col-c lazy">
         <p class="col-header regular-medium large-text">Featured Artist</p>
         {% set item = featuredArtists.first() %}
         {% set myImage = item.thumbnail.first().getUrl() ?? item.exhibitionSlideshow.slide.first().slideshowImage.first().getUrl() ?? null %}

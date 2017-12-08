@@ -1,11 +1,11 @@
 {% extends "_layout" %}
 {% block content %}
-<div class="feature-container lazy unloaded">
+<div class="feature-container lazy">
   <p class="artist-header large-text regular-medium">Exhibitions</p>
   <a href="{{ entry.heroExhibition.first().url }}">
     {% include "snippets/_hero-img" with { entry: entry.heroExhibition.first() } %}
   </a>
-  <div class="exhibition-hero lazy unloaded">
+  <div class="exhibition-hero lazy">
     {% set links = craft.entries.section('artistHome').relatedTo(entry.heroExhibition.first().artistname.first().category.first()).find(1) %}
     {% if links|length > 0 %}
       {% for item in links[:1] %}
@@ -30,7 +30,7 @@
   <div class="exhibitions-wrapper">
     {% include "snippets/_exhibitions" with { leftFeature: firstFeatureEx, rightFeature: secFeatureEx } %}
   </div>
-  <div class="related-artist-c lazy unloaded">
+  <div class="related-artist-c lazy">
     <p class="ra-header regular-medium large-text">Past Exhibitions</p>
     <div class="grid-row">
       {% for item in entry.relatedContent.featureGrid.first().relatedContent %}

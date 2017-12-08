@@ -12,6 +12,7 @@ return array(
 	'*' => array (
 		// Base site URL
 		'siteUrl' => "https://feldmangallery.com/",
+		'defaultImageQuality' => 80,
 
 		// Environment-specific variables (see https://craftcms.com/docs/multi-environment-configs#environment-specific-variables)
 		'environmentVariables' => array(),
